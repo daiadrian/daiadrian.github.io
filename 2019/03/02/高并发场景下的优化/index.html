@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="分库分表,扩容,缓存,拆分限流,降级熔断,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="​    当应用在面临高并发访问的情况下，一般的web项目很容易会出现请求处理不过来和性能瓶颈的问题，同时数据库的压力也会变得很大；尤其是单机处理的能力极其有限。那么在这种情况下就需要考虑相关的解决方案去提升应用的并发处理能力了。 数据库分库分表​    关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添">
+<meta name="keywords" content="分库分表,扩容,缓存,拆分限流,降级熔断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高并发场景下的优化">
+<meta property="og:url" content="http://yoursite.com/2019/03/02/高并发场景下的优化/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="​    当应用在面临高并发访问的情况下，一般的web项目很容易会出现请求处理不过来和性能瓶颈的问题，同时数据库的压力也会变得很大；尤其是单机处理的能力极其有限。那么在这种情况下就需要考虑相关的解决方案去提升应用的并发处理能力了。 数据库分库分表​    关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/03/02/高并发场景下的优化/高并发场景下的优化/LeakyBucket.jpg">
+<meta property="og:updated_time" content="2019-03-02T09:02:28.192Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高并发场景下的优化">
+<meta name="twitter:description" content="​    当应用在面临高并发访问的情况下，一般的web项目很容易会出现请求处理不过来和性能瓶颈的问题，同时数据库的压力也会变得很大；尤其是单机处理的能力极其有限。那么在这种情况下就需要考虑相关的解决方案去提升应用的并发处理能力了。 数据库分库分表​    关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/02/高并发场景下的优化/高并发场景下的优化/LeakyBucket.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/02/高并发场景下的优化/">
+
+
+
+
+
+  <title>高并发场景下的优化 | Adrian</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/daiadrian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Adrian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/02/高并发场景下的优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">高并发场景下的优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-02T16:58:05+08:00">
+                2019-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/高并发/" itemprop="url" rel="index">
+                    <span itemprop="name">高并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>​    当应用在面临高并发访问的情况下，一般的web项目很容易会出现请求处理不过来和性能瓶颈的问题，同时数据库的压力也会变得很大；尤其是单机处理的能力极其有限。那么在这种情况下就需要考虑相关的解决方案去提升应用的并发处理能力了。</p>
+<h2 id="数据库分库分表"><a href="#数据库分库分表" class="headerlink" title="数据库分库分表"></a>数据库分库分表</h2><p>​    关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添加从库、优化索引，做很多操作时性能仍下降严重。此时就要考虑对其进行切分了，切分的目的就在于减少数据库的负担，缩短查询时间。</p>
+<p>​    数据库分布式核心内容无非就是<strong>数据切分</strong>（Sharding），以及切分后对数据的定位、整合。数据切分就是将数据分散存储到多个数据库中，使得单一数据库中的数据量变小，通过扩充主机的数量缓解单一数据库的性能问题，从而达到提升数据库操作性能的目的。</p>
+<h3 id="数据切分（分库分表）"><a href="#数据切分（分库分表）" class="headerlink" title="数据切分（分库分表）"></a>数据切分（分库分表）</h3><p>​    数据切分指通过某种特定的条件，将我们存放在同一个数据库中的数据分散存放到多个数据库（主机）上面，以达到分散单台设备负载的效果。数据的切分同时还可以提高系统的总体可用性，因为单台设备Crash之后，只有总体数据的某部分不可用，而不是所有的数据。</p>
+<p>数据切分根据其切分类型，可以分为两种方式：</p>
+<ul>
+<li>按照<font color="red"><strong>不同的表</strong>（或者Schema）来切分到<strong>不同的数据库</strong></font>（主机）之上，这种切可以称之为数据的垂直（纵向）切分</li>
+<li>根据表中的数据的逻辑关系，将<font color="red"><strong>同一个表</strong>中的数据按照某种条件拆分到多台数据库</font>（主机）上面，这种切分称之为数据的水平（横向）切分</li>
+</ul>
+<h3 id="垂直切分"><a href="#垂直切分" class="headerlink" title="垂直切分"></a>垂直切分</h3><p>​    根据业务耦合性，将关联度低的不同表存储在不同的数据库。做法与大系统拆分为多个小系统类似，按业务分类进行独立划分。与”微服务治理”的做法相似，每个微服务使用单独的一个数据库（即根据功能模块来进行数据的切分，不同功能模块的数据存放于不同的数据库主机中）</p>
+<h4 id="单表"><a href="#单表" class="headerlink" title="单表"></a>单表</h4><p>​    对于单表的垂直切分是基于数据库中的<strong>“列”</strong>进行，某个表字段较多，可以新建一张扩展表，将不经常用或字段长度较大的字段拆分出去到扩展表中。</p>
+<p>​    在字段很多的情况下（例如一个大表有100多个字段），通过<strong>“大表拆小表”</strong>，更便于开发与维护，也能避免跨页问题，MySQL底层是通过数据页存储的，一条记录占用空间过大会导致跨页，造成额外的性能开销。</p>
+<p>​    另外数据库以行为单位将数据加载到内存中，这样表中字段长度较短且访问频率较高，内存能加载更多的数据，命中率更高，减少了磁盘IO，从而提升了数据库性能</p>
+<h4 id="垂直切分的优缺点"><a href="#垂直切分的优缺点" class="headerlink" title="垂直切分的优缺点"></a>垂直切分的优缺点</h4><ul>
+<li>优点<ol>
+<li>解决业务系统层面的耦合，业务清晰</li>
+<li>与微服务的治理类似，也能对不同业务的数据进行分级管理、维护、监控、扩展等</li>
+<li>高并发场景下，垂直切分一定程度的提升IO、数据库连接数、单机硬件资源的瓶颈</li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>部分表无法join，只能通过接口聚合方式解决，提升了开发的复杂度</li>
+<li>分布式事务处理复杂</li>
+<li>依然存在单表数据量过大的问题（需要水平切分）</li>
+</ol>
+</li>
+</ul>
+<h3 id="水平切分"><a href="#水平切分" class="headerlink" title="水平切分"></a>水平切分</h3><p>​    水平切分是根据表内数据内在的逻辑关系，按照某种规则<font color="blue"><em>（如根据某个数字类型字段基于特定数目取模，某个时间类型字段的范围，或者是某个字符类型字段的hash值，或者用户表的地区等等）</em></font>将同一个表按不同的条件分散到多个数据库或多个表中，每个表中只包含一部分数据，从而使得单个表的数据量变小，达到分布式的效果。</p>
+<p>​    当一个应用难以再细粒度的垂直切分，或<strong>切分后数据量行数巨大，存在单库读写、存储性能瓶颈</strong>，这时候就需要进行水平切分了。</p>
+<h4 id="水平切分优缺点"><a href="#水平切分优缺点" class="headerlink" title="水平切分优缺点"></a>水平切分优缺点</h4><ul>
+<li>优点<ol>
+<li>不存在单库数据量过大、高并发的性能瓶颈，提升系统稳定性和负载能力</li>
+<li>应用端改造较小，不需要拆分业务模块</li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>跨分片的事务一致性难以保证</li>
+<li>跨库的join关联查询性能较差</li>
+<li>数据多次扩展难度和维护量极大</li>
+</ol>
+</li>
+</ul>
+<h4 id="经典的水平切分规则"><a href="#经典的水平切分规则" class="headerlink" title="经典的水平切分规则"></a>经典的水平切分规则</h4><ul>
+<li><p>根据数值范围：按照时间区间或ID区间来切分</p>
+<blockquote>
+<p>这样的优点在于：</p>
+<ul>
+<li>单表大小可控</li>
+<li>天然便于水平扩展，后期如果想对整个分片集群扩容时，只需要添加节点即可，无需对其他分片的数据进行迁移</li>
+<li>使用分片字段进行范围查找时，连续分片可快速定位分片进行快速查询，有效避免跨分片查询的问题。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>热点数据成为性能瓶颈。连续分片可能存在数据热点，例如按时间字段分片，有些分片存储最近时间段内的数据，可能会被频繁的读写，而有些分片存储的历史数据，很少被查询</li>
+</ul>
+</blockquote>
+</li>
+<li><p>根据数值取模：一般采用hash取模mod的切分方式</p>
+<blockquote>
+<p>优点：</p>
+<ul>
+<li>数据分片相对比较均匀，不容易出现热点和并发访问的瓶颈</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>后期分片集群扩容时，需要迁移旧的数据（使用一致性hash算法能较好的避免这个问题）</li>
+<li>容易面临跨分片查询的复杂问题（如果查询时无法定位表，那么需要同时对多个数据库表进行查询再合并数据，会拖累数据库）</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="分库分表带来的问题及其解决办法"><a href="#分库分表带来的问题及其解决办法" class="headerlink" title="分库分表带来的问题及其解决办法"></a>分库分表带来的问题及其解决办法</h3><p>​    分库分表能有效的环节单机和单库带来的性能瓶颈和压力，突破网络IO、硬件资源、连接数的瓶颈，同时也带来了一些问题：</p>
+<ol>
+<li><p>事务一致性问题</p>
+<ul>
+<li>分布式事务：当更新内容同时分布在不同库中，不可避免会带来跨库事务问题。跨分片事务也是分布式事务。分布式事务能最大限度保证了数据库操作的原子性。但在提交事务时需要协调多个节点，推后了提交事务的时间点，延长了事务的执行时间。导致事务在访问共享资源时发生冲突或死锁的概率增高。随着数据库节点的增多，这种趋势会越来越严重，从而成为系统在数据库层面上水平扩展的枷锁</li>
+<li>最终一致性：对于那些性能要求很高，但对一致性要求不高的系统，往往不苛求系统的<strong>实时一致性</strong>，只要在允许的时间段内达到最终一致性即可，可采用事务补偿的方式。与事务在执行中发生错误后立即回滚的方式不同，事务补偿是一种事后检查补救的措施，一些常见的实现方法有：对数据进行对账检查，基于日志进行对比，定期同标准数据来源进行同步等等</li>
+</ul>
+</li>
+<li><p>跨节点关联查询 join 问题</p>
+<blockquote>
+<p>切分之前，系统中很多列表和详情页所需的数据可以通过sql join来完成。而切分之后，数据可能分布在不同的节点上，此时join带来的问题就比较麻烦了，考虑到性能，尽量避免使用join查询</p>
+<p>对于该问题的解决方案：</p>
+<ul>
+<li>全局表，将所有模块依赖的一些表在每个数据库中都保存一份</li>
+<li>增加冗余字段，利用空间换时间，为了性能而避免join查询。例如：订单表保存userId时候，也将userName冗余保存一份，这样查询订单详情时就不需要再去查询User表了</li>
+<li>通过应用程序分多次查询，再将得到的数据组装合并</li>
+</ul>
+</blockquote>
+</li>
+<li><p>跨节点分页、排序、函数问题</p>
+<blockquote>
+<p>跨节点多库进行查询时，会出现limit分页、order by排序等问题。</p>
+<p>分页需要按照指定字段进行排序，当排序字段就是分片字段时，通过分片规则就比较容易定位到指定的分片；当排序字段非分片字段时，就变得比较复杂了。需要先在不同的分片节点中将数据进行排序并返回，然后将不同分片返回的结果集进行汇总和再次排序，最终返回给用户</p>
+</blockquote>
+</li>
+<li><p>全局主键避重问题</p>
+<blockquote>
+<p>在分库分表环境中，由于表中数据同时存在不同数据库中，主键值平时使用的自增长将无用武之地，某个分区数据库自生成的<strong>ID无法保证全局唯一</strong>。因此需要单独设计全局主键，以避免跨库主键重复问题。（可用UUID或者分布式的全局ID生成器(如推特的Snowflake)）</p>
+</blockquote>
+</li>
+<li><p>数据迁移、扩容问题</p>
+<blockquote>
+<p>当业务高速发展，面临性能和存储的瓶颈时，才会考虑分片设计，此时就不可避免的需要考虑历史数据迁移的问题。一般做法是先读出历史数据，然后按指定的分片规则再将数据写入到各个分片节点中。此外还需要根据当前的数据量和QPS，以及业务发展的速度，进行容量规划，推算出大概需要多少分片（一般建议单个分片上的单表数据量不超过1000W）</p>
+<p>如果采用数值范围分片，只需要添加节点就可以进行扩容了，不需要对分片数据迁移。如果采用的是数值取模分片，则考虑后期的扩容问题就相对比较麻烦</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="什么时候需要分库分表"><a href="#什么时候需要分库分表" class="headerlink" title="什么时候需要分库分表"></a>什么时候需要分库分表</h3><ul>
+<li>能不切分尽量不要切分</li>
+<li>数据量过大，正常运维影响业务访问</li>
+<li>随着业务发展，需要对某些字段垂直拆分</li>
+<li>数据量快速增长</li>
+<li>安全性和可用性：在业务层面上垂直切分，将不相关的业务的数据库分隔，因为每个业务的数据量、访问量都不同，不能因为一个业务把数据库搞挂而牵连到其他业务。利用水平切分，当一个数据库出现问题时，不会影响到100%的用户，每个库只承担业务的一部分数据，这样整体的可用性就能提高</li>
+</ul>
+<h3 id="垂直切分和水平切分的联合使用"><a href="#垂直切分和水平切分的联合使用" class="headerlink" title="垂直切分和水平切分的联合使用"></a>垂直切分和水平切分的联合使用</h3><p>​    一个应用系统的负载都是在慢慢的增长的，当系统开始遇到性能瓶颈的时候。大多数情况下会先选择对数据库进行垂直切分，因为这样的成本最先，最符合这个时期所追求的最大投入产出比。    </p>
+<p>​    但是随着业务的不断扩张，系统负载的持续增长，在系统稳定一段时期之后，经过了垂直拆分之后的数据库集群可能会再一次不堪重负，遇到了性能瓶颈。如果再选择对系统数据库进行垂直切分的话，会随着时间又再次面临同样的问题。这个时候就需要通过水平切分的优势来解决这个问题了，而且完全可以在垂直切分后的基础上进行水平切分。</p>
+<h2 id="数据库扩容"><a href="#数据库扩容" class="headerlink" title="数据库扩容"></a>数据库扩容</h2><p>​    随着时间的推进和业务的发展，系统的数据量会不停的增长，无论是数据库的容量，还是单库单表的数据量也总会到达天花板，此时该如何扩展我们的数据库性能？</p>
+<ul>
+<li><p>水平扩容</p>
+<blockquote>
+<ol>
+<li><font color="red">增加服务器数量</font>，就能线性扩充系统性能</li>
+<li>但是增加过多的服务器会增加网络、数据库IO开销、管理多个服务器的难度</li>
+</ol>
+</blockquote>
+</li>
+<li><p>垂直扩容：提升单机处理能力</p>
+<blockquote>
+<ol>
+<li>增强单机硬件性能（升级CPU,SSD固态硬盘等）</li>
+<li>提升单机架构性能（使用Cache来减少IO次数，使用异步来增加单服务吞吐量，使用无锁数据结构来减少响应时间）</li>
+<li>但是这样会增大单个服务中其他软件设施的依赖与管理、服务内部复杂度</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<p>​        对数据库的扩容不管是垂直还是水平扩容都会有优缺点，这就需要根据实际的业务需求来选择了更加合适的解决方案了：</p>
+<ul>
+<li><font color="blue">读操作扩展</font>：假如网站是<strong>读操作</strong>比较多，比如博客网站。通过对数据库进行垂直扩容并且结合redis、CDN等构建一个健壮的缓存系统是个不错的选择。如果系统超负荷运行，将更多的数据放在缓存中来缓解系统的读压力。采用水平扩容没有太大的意义，因为性能的瓶颈不在写操作，所以不需要实时去完成，用更多的服务器来分担压力性价比太低。</li>
+<li><font color="blue">写操作扩展</font>：假如写操作比较多，比如大型网站的交易系统，可考虑水平扩展的数据存储方式，比如Cassandra、Hbase等。和大多数的关系型数据库不同，这种数据存储会随着数据量的增长从而增加更多的节点。也可以考虑垂直扩容提升单个数据库的性能，但会发现资金与硬盘的IO能力是有限的，所以需要增加更多数据库来分担写的压力</li>
+</ul>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>​    <strong>使用缓存可以减少数据库压力(I/O压力)与提高访问性能</strong></p>
+<p>​    缓存通常适合<font color="red">读多写少</font>的业务场景，实时性要求越低越适合缓存（即数据在缓存中更新的次数越少越适合）</p>
+<ol>
+<li><p>缓存特征</p>
+<ul>
+<li><p>命中率：命中数 /（命中数 + 没有命中数），命中率越高产生收益也就越高，性能也就越好，相应的也就越短，吞吐量也就越高，抗并发的能力也就越强</p>
+</li>
+<li><p>最大元素（空间）：缓存中存放的最大元素的数量，当缓存的数量超过了缓存空间，则会触发缓存清空策略</p>
+</li>
+<li><p>清空策略：</p>
+<blockquote>
+<p>一旦缓存中元素数量最大元素或者缓存数据所占空间超过其最大支持空间，那么将会触发缓存清空策略，根据不同的场景合理的设置最大元素值往往可以一定程度上提高缓存的命中率，从而更有效的时候缓存</p>
+</blockquote>
+<ul>
+<li>FIFO先进先出策略，先进入的优先清除</li>
+<li>LFU（Least Frequently Used，根据数据的历史访问频率来淘汰数据，对比命中数；其核心思想是<strong>“如果数据过去被访问多次，那么将来被访问的频率也更高”</strong>）</li>
+<li>LRU（Least recently used，最近最少使用策略；其核心思想是<strong>“如果数据最近被访问过，那么将来被访问的几率也更高”</strong>）</li>
+<li>过期时间（根据元素设置的过期时间来清除缓存）</li>
+<li>随机清除</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>缓存分类</p>
+<ul>
+<li>本地缓存：Java中的本地缓存是存在当前应用进程内部的，没有过多的网络开销。在集群节点之间不需要互相通知的情况下使用较为合适</li>
+<li>分布式缓存：应用分离的缓存服务，其自身就是一个独立的应用，与本地应用是隔离的，多个应用之间共享缓存</li>
+</ul>
+</li>
+<li><p>高并发场景下缓存常见问题</p>
+<ul>
+<li><p>缓存一致性</p>
+<blockquote>
+<p>当数据时效性要求很高时，需要保证缓存中的数据与数据库中的保持一致，而且需要保证缓存节点和副本中的数据也保持一致，不能出现差异现象。这就比较依赖缓存的过期和更新策略。一般会在数据发生更改的时，主动更新缓存中的数据或者移除对应的缓存</p>
+</blockquote>
+</li>
+<li><p>缓存并发</p>
+<blockquote>
+<p>在高并发场景下，多个请求并发的去从数据库获取数据，会对后端数据库造成极大的冲击，甚至导致 “雪崩”现象。当某个缓存key在被更新时，同时也可能被大量请求在获取，这也会导致缓存一致性的问题。</p>
+<p>那如何解决类似问题呢？在缓存更新或者过期的情况下，先尝试获取到锁（分布式锁），当更新或者从数据库获取完成后再释放锁，其他的请求只需要牺牲一定的等待时间，即可直接从缓存中继续获取数据</p>
+</blockquote>
+</li>
+<li><p>缓存穿透</p>
+<blockquote>
+<p>在高并发场景下，如果某一个key被高并发访问，没有被命中，出于对容错性考虑，会尝试去从后端数据库中获取，从而导致了大量请求达到数据库，而当该key对应的数据本身就是空的情况下，这就导致数据库中并发的去执行了很多不必要的查询操作，从而导致数据库的压力增大。</p>
+<p>那如何解决类似问题呢？</p>
+<ul>
+<li>缓存空对象；对查询结果为空的对象也进行缓存，如果是集合，可以缓存一个空的集合（非null），如果是缓存单个对象，可以通过字段标识来区分。这样避免请求穿透到后端数据库。同时，也需要保证缓存数据的时效性。这种方式实现起来成本较低，比较适合命中不高，但<strong>可能被频繁更新的数据</strong></li>
+<li>单独过滤处理；对所有可能对应数据为空的key进行统一的存放，并在请求前做拦截，这样避免请求穿透到后端数据库。这种方式实现起来相对复杂，比较适合命中不高，但是<strong>更新不频繁的数据</strong></li>
+</ul>
+</blockquote>
+</li>
+<li><p>缓存雪崩</p>
+<blockquote>
+<p>缓存雪崩就是指由于缓存没有命中的原因，导致大量请求到达后端数据库，从而导致数据库崩溃，整个系统崩溃，发生灾难。“缓存并发”，“缓存穿透”等问题，都可能会导致缓存雪崩现象发生，这些问题可能会被恶意攻击者所利用。</p>
+<p>还有一种情况，例如某个时间点内，系统预加载的缓存周期性集中失效了，也可能会导致雪崩。为了避免这种周期性失效，可以通过设置不同的过期时间，来错开缓存过期，从而避免缓存集中失效</p>
+<p>从应用架构角度，我们可以通过限流、降级、熔断等手段来降低影响，也可以通过多级缓存来避免这种灾难</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>缓存介质</p>
+<ul>
+<li><strong>内存</strong>：将缓存存储于内存中是最快的选择，无需额外的I/O开销，但是内存的缺点是存储的数据没有持久化，一旦应用异常或者宕机，数据很难或者无法复原</li>
+<li><strong>硬盘</strong>：很多缓存框架会结合使用内存和硬盘，在内存分配空间满了或是在异常的情况下，可以被动或主动的将内存空间数据持久化到硬盘中，达到释放空间或备份数据的目的</li>
+</ul>
+</li>
+</ol>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>​    消息队列已经逐渐成为<strong>系统内部通信的核心手段和异步RPC</strong>的主要手段。</p>
+<p>​    它具有低耦合、可靠投递、广播、流量控制、最终一致性等一系列功能</p>
+<ol>
+<li><p>消息队列的特性</p>
+<ul>
+<li>业务无关：只做消息的分发</li>
+<li>FIFO：先进入队列的先到达</li>
+<li>容灾：节点的动态增删和消息的持久化</li>
+<li>性能：吞吐量提升，系统内部通信效率提高</li>
+</ul>
+</li>
+<li><p>使用消息队列的好处</p>
+<ul>
+<li><p><strong>异步解耦</strong></p>
+<blockquote>
+<p>使用消息队列，可以异步处理请求，从而缓解系统的压力</p>
+<p>例如：短信发送时只要保证放到消息队列中就可以接着做后面的事情。一个事务只关心本质的流程，需要依赖其他事情但是不那么重要的时候，有通知即可，无需等待结果</p>
+</blockquote>
+</li>
+<li><p><strong>保证最终一致性</strong></p>
+<blockquote>
+<p>最终一致性指的是两个系统的状态保持一致，要么都成功，要么都失败。当然有个时间限制，理论上越快越好，但实际上在各种异常的情况下，可能会有一定延迟达到最终一致状态，但最后两个系统的状态是一样的</p>
+</blockquote>
+</li>
+<li><p><strong>错峰与流控</strong></p>
+<blockquote>
+<p>上下游对于事情的处理是不同的，比如WEB前端每秒承受上千万的请求都是可以的但是数据库的处理却非常有限；迫于成本的压力我们不能要求数据库的机器数量与前端资源一样；这样的问题同样存在于系统与系统之间,比如短信系统的速度卡在网关上边它与前端的并发量不是一个数量级的，用户玩几秒种收到短信也是可以的；针对于这样的场景如果没有消息队列也能实现但是系统的复杂度非常的高</p>
+</blockquote>
+</li>
+<li><p><strong>广播</strong> </p>
+<blockquote>
+<p>如果没有消息队列每一个新的业务方介入都需要联调一次接口，使用消息队列只需要关心消息是否送达到消息队列，新接入的接口订阅相关的消息自己做处理就可以了</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="应用拆分"><a href="#应用拆分" class="headerlink" title="应用拆分"></a>应用拆分</h2><ol>
+<li><p>拆分的原则</p>
+<ul>
+<li>业务优先：每个系统都会有多个模块，每个模块又有多个业务功能；按照业务边界进行切割，再对模块进行拆分</li>
+<li>循序渐进：边拆分边测试，保证系统的正常运行</li>
+<li>兼顾技术：重构、分层（不能为了分布式而分布式，拆分过程不仅是业务梳理也是代码重构的过程，根据技术进行分层来分配工作）</li>
+<li>可靠测试：测试完毕后，才可进行下一步，每一步都要有足够的测试才可进行下一步，避免小错误引起蝴蝶效应</li>
+</ul>
+</li>
+<li><p>应用拆分时设计和选择</p>
+<ul>
+<li><p>应用之间通信：RPC 、消息队列、API（基于RESTFul风格的接口原则）</p>
+<blockquote>
+<p>消息队列通常用于传输数据包小但是数据量大，对实时性要求低的场景。而采用RPC要求实时性高</p>
+</blockquote>
+</li>
+<li><p>应用之间数据库设计：每个应用都有独立的数据库</p>
+<blockquote>
+<p>通常情况下，每个应用都有自己独立的数据库，如果共同使用的信息，可以考虑放在common中使用</p>
+</blockquote>
+</li>
+<li><p>避免事务操作跨应用；分布式事务是一个很消耗资源的问题，应用之间服务分开开发，能够保持相互独立</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="应用限流"><a href="#应用限流" class="headerlink" title="应用限流"></a>应用限流</h2><p>​    每个API接口都是有访问上限的，当访问频率或者并发量超过其承受范围时候，我们就必须考虑限流来保证接口的可用性或者降级可用性。即接口也需要安装上保险丝，以防止非预期的请求对系统压力过大而引起的系统瘫痪。首先先了解一下一些衡量服务器指标的概念：</p>
+<ul>
+<li>QPS：对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准（每秒查询率）<ul>
+<li>QPS = 并发量 / 平均响应时间</li>
+<li>通常QPS用来表达和衡量当前系统的负载</li>
+<li>对应fetches/sec，即每秒的响应请求数，也即是最大吞吐能力</li>
+</ul>
+</li>
+<li>响应时间（RT）：响应时间是指系统对请求作出响应的时间<ul>
+<li>它完整地记录了整个计算机系统处理请求的时间</li>
+<li>响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度</li>
+</ul>
+</li>
+<li>吞吐量（TPS）：系统在单位时间内处理请求的数量<ul>
+<li>对于没有并发的系统而言，吞吐量就是响应时间的倒数</li>
+<li>通常用吞吐量作为并发系统的性能指标</li>
+<li>对于一个有并发的系统，如果只有一个用户使用时系统的平均响应时间是t，当有你n个用户使用时，每个用户看到的响应时间通常并不是n×t，而往往比n×t小很多（当然，在某些特殊情况下也可能比n×t大，甚至大很多）。这是因为在处理单个请求时，在每个时间点都可能有许多资源被闲置，当处理多个请求时，如果资源配置合理，每个用户看到的平均响应时间并不随用户数的增加而线性增加。实际上，不同系统的平均响应时间随用户数增加而增长的速度也不大相同，这也是采用吞吐量来度量并发系统的性能的主要原因。一般而言，吞吐量是一个比较通用的指标，两个具有不同用户数和用户使用模式的系统，如果其最大吞吐量基本一致，则可以判断两个系统的处理能力基本一致</li>
+</ul>
+</li>
+<li>并发量：系统可以同时承载的正常使用系统功能的用户的数量<ul>
+<li>对于网站系统一般会有三个关于用户数的统计数字：注册用户数、在线用户数和同时发请求用户数</li>
+</ul>
+</li>
+</ul>
+<p>​    限流就是通过对并发访问/请求进行限速或一个时间窗口内的请求进行限速，从而达到保护系统的目的。一般系统可以通过压测来<strong>预估能处理的峰值</strong>，一旦达到设定的峰值阀值，则可以：</p>
+<ul>
+<li>拒绝服务（定向错误页或告知资源没有了）</li>
+<li>排队或等待（例如：秒杀、评论、下单）</li>
+<li>降级（返回默认数据）</li>
+</ul>
+<p>限流常用算法：</p>
+<ol>
+<li><p>计数器法</p>
+<blockquote>
+<p>​    该算法主要用来限制一定时间内的总并发数，比如数据库连接池、线程池、秒杀的并发数；计数器限流只要一定时间内的总请求数超过设定的阀值则进行限流，是一种简单粗暴的总数量限流，而不是平均速率限流</p>
+<p>​    这个方法有一个致命问题：临界问题——当遇到恶意请求，比如设定的阈值是1分钟内100次请求，在59秒时，瞬间请求100次，并且在60秒时请求100次，那么这个用户在1秒内请求了200次，用户可以在重置节点（就是重置计数器的值）时突发请求，而瞬间超过我们设置的速率限制，用户可能通过算法漏洞击垮我们的应用</p>
+</blockquote>
+</li>
+<li><p>滑动窗口算法</p>
+<blockquote>
+<p>​    滑动窗口算法类似将上面计数器法的1s时间拆分成若干个小窗口（此例拆分成4个窗口），每个窗口对应250ms；假设用户利用上一秒最后一刻和下一秒第一刻发起瞬间的高并发请求；此时会统计前一秒中的最后750ms和下一秒的前250ms，这样能够判断出用户的访问依旧超过了1s的访问数量，因此依然会阻拦用户的访问</p>
+</blockquote>
+</li>
+<li><p>漏桶算法</p>
+<blockquote>
+<p>​    水（请求）先进入到漏桶里，漏桶以一定的速度出水（接口有响应速率），当水（请求）流入速度过大会直接溢出（访问频率超过接口响应速率），然后就拒绝请求（丢弃溢出的数据包）；可以看出<strong>漏桶算法能强行限制数据的传输速率</strong>。</p>
+<p>​    因为漏桶的漏出速率是固定的，所以即使网络中不存在资源冲突（没有发生拥塞），漏桶算法也不能使流突发（burst）到端口速率。因此，漏桶算法对于存在突发特性的流量来说缺乏效率</p>
+</blockquote>
+<p><img src="/2019/03/02/高并发场景下的优化/./高并发场景下的优化/LeakyBucket.jpg" alt="漏桶算法示意图"></p>
+</li>
+<li><p>令牌桶算法</p>
+<blockquote>
+<p>​    随着时间流逝，系统会按恒定1/QPS时间间隔（单位是ms）往桶里加入Token（想象和漏洞漏水相反，有个水龙头在不断的加水）；如果桶已经满了就不再加了，新请求来临时会拿走一个Token，如果没有Token可拿了就阻塞（可以加入等待队列）或者拒绝服务。</p>
+<p>​    <strong>令牌桶的好处是可以方便的改变速度</strong>：一旦需要提高速率（应对突发传输），则按需提高放入桶中的令牌的速率.。一般会定时（比如100毫秒）往桶中增加一定数量的令牌,，有些变种算法则实时的计算应该增加的令牌的数量</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="服务降级与服务熔断"><a href="#服务降级与服务熔断" class="headerlink" title="服务降级与服务熔断"></a>服务降级与服务熔断</h2><h3 id="服务降级"><a href="#服务降级" class="headerlink" title="服务降级"></a>服务降级</h3><p>​    服务压力剧增的时候根据当前的业务情况及流量对一些服务和页面有策略的降级，以此缓解服务器的压力，以保证核心任务的进行。同时保证大部分请求，客户能得到正确的响应。也就是当前的请求处理不了了或者出错了，给一个<strong>默认</strong>的返回</p>
+<h4 id="降级分类"><a href="#降级分类" class="headerlink" title="降级分类"></a>降级分类</h4><ol>
+<li>降级按照是否自动化可分为：</li>
+</ol>
+<ul>
+<li><font color="green"><strong>自动降级</strong></font>
+
+<ul>
+<li>超时降级：主要配置好超时时间和超时重试次数和机制，并使用异步机制探测回复情况</li>
+<li>失败次数降级：主要是一些不稳定的API，当<strong>失败调用次数</strong>达到一定阀值自动降级，同样要使用异步机制探测回复情况</li>
+<li><font color="red">故障降级：比如要调用的远程服务挂掉了（网络故障、DNS故障、http服务返回错误的状态码、RPC服务抛出异常），则可以直接降级。降级后的处理方案有：默认值（比如库存服务挂了，返回默认现货）、兜底数据（比如广告挂了，返回提前准备好的一些静态页面）、缓存（之前暂存的一些缓存数据）</font></li>
+<li><font color="red">限流降级</font>：当我们去秒杀或者抢购一些限购商品时，此时可能会因为访问量太大而导致系统崩溃，此时开发者会使用限流来进行<strong>限制访问量，当达到限流阀值，后续请求会被降级</strong>；降级后的处理方案可以是：排队页面（将用户导流到排队页面等一会重试）、无货（直接告知用户没货了）、错误页（如活动太火爆了，稍后重试）</li>
+</ul>
+</li>
+<li><p>人工降级</p>
+<blockquote>
+<p>在大促期间通过监控发现线上的一些服务存在问题，这个时候需要暂时将这些服务摘掉；还有有时候通过任务系统调用一些服务，但是服务依赖的数据库可能存在：服务器挂掉了或者很多慢查询，此时需要暂停下任务系统让服务方进行处理；还有发现突然调用量太大，可能需要改变处理方式（比如同步转换为异步）；此时就可以使用开关来完成降级</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>降级按照功能可分为：</p>
+<ul>
+<li><p>读服务降级：对于读服务降级一般采用的策略有：暂时切换读（降级到读缓存、降级到走静态化）、暂时屏蔽读（屏蔽读入口、屏蔽某个读服务）</p>
+<blockquote>
+<p>比如多级缓存模式，如果后端服务有问题，可以降级为只读缓存，这种方式适用于对读一致性要求不高的场景</p>
+</blockquote>
+</li>
+<li><p>写服务降级：比如秒杀抢购，我们可以只进行Cache的更新，然后异步同步扣减库存到DB，保证最终一致性即可，此时可以将DB降级为Cache</p>
+</li>
+</ul>
+</li>
+<li><p>降级按照处于的系统层次可分为：</p>
+<ul>
+<li>多级降级：缓存是离用户最近越高效；而降级是<strong>离用户越近</strong>越能对系统保护的好。因为业务的复杂性导致越到后端QPS/TPS越低</li>
+</ul>
+</li>
+</ol>
+<h3 id="服务熔断"><a href="#服务熔断" class="headerlink" title="服务熔断"></a>服务熔断</h3><p>​    服务熔断一般是指软件系统中，由于某些原因使得服务出现了<strong>过载现象</strong>，为防止造成整个系统故障，从而采用的一种保护措施，所以很多地方把熔断亦称为过载保护</p>
+<h3 id="服务熔断和服务降级比较"><a href="#服务熔断和服务降级比较" class="headerlink" title="服务熔断和服务降级比较"></a>服务熔断和服务降级比较</h3><ul>
+<li>相似点：<ol>
+<li>目的很一致，都是从可用性可靠性着想，为防止系统的整体缓慢甚至崩溃，采用的技术手段</li>
+<li>最终表现类似，对于两者来说，最终让用户体验到的是某些功能暂时不可达或不可用</li>
+<li>粒度一般都是服务级别，当然，业界也有不少更细粒度的做法，比如做到数据持久层（允许查询，不允许增删改）</li>
+<li>自治性要求很高，熔断模式一般都是服务基于策略的自动触发，降级虽说可人工干预，但在微服务架构下，完全靠人显然不可能，开关预置、配置中心都是必要手段</li>
+</ol>
+</li>
+<li>不同点：<ol>
+<li>触发原因不太一样，<strong>服务熔断一般是某个服务（下游服务）故障引起</strong>，而<strong>服务降级一般是从整体负荷考虑</strong></li>
+<li>管理目标的层次不太一样，熔断其实是一个框架级的处理，每个微服务都需要（无层级之分），而降级一般需要对业务有层级之分（比如降级一般是从最外围服务开始）</li>
+<li>实现方式不太一样</li>
+</ol>
+</li>
+</ul>
+<h3 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h3><p>​    Hystrix旨在通过控制那些访问远程系统、服务和第三方库的节点，从而对延迟和故障提供更强大的容错能力。Hystrix具备拥有回退机制和断路器功能的线程和信号隔离，请求缓存和请求打包（<code>request collapsing</code>，即自动批处理），以及监控和配置等功能</p>
+<h4 id="Hystrix能做什么"><a href="#Hystrix能做什么" class="headerlink" title="Hystrix能做什么"></a>Hystrix能做什么</h4><ul>
+<li>在通过第三方客户端访问依赖服务出现高延迟或者失败时，为系统提供保护和控制</li>
+<li>在分布式系统中防止级联失败</li>
+<li>快速失败（Fail fast）同时能快速恢复</li>
+<li>提供失败回退（Fallback）和优雅的服务降级机制</li>
+<li>提供近实时的监控、报警和运维控制手段</li>
+</ul>
+<h4 id="Hystrix设计原则"><a href="#Hystrix设计原则" class="headerlink" title="Hystrix设计原则"></a>Hystrix设计原则</h4><ul>
+<li>防止单个依赖耗尽容器（例如 Tomcat）内所有用户线程</li>
+<li>降低系统负载，对无法及时处理的请求快速失败（Fail fast）而不是排队</li>
+<li>提供失败回退（Fallback），以在必要时让失效对用户透明化</li>
+<li>使用隔离机制（例如熔断器模式等）降低依赖服务对整个系统的影响</li>
+<li>针对系统服务的度量、监控和报警，提供优化以满足近实时性的要求</li>
+<li>在绝大部分需要动态调整配置并快速部署到所有应用方面，提供优化以满足快速恢复的要求</li>
+<li>能保护应用不受依赖服务的整个执行过程中失败的影响，而不仅仅是网络请求</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分库分表/" rel="tag"><i class="fa fa-tag"></i> 分库分表</a>
+          
+            <a href="/tags/扩容/" rel="tag"><i class="fa fa-tag"></i> 扩容</a>
+          
+            <a href="/tags/缓存/" rel="tag"><i class="fa fa-tag"></i> 缓存</a>
+          
+            <a href="/tags/拆分限流/" rel="tag"><i class="fa fa-tag"></i> 拆分限流</a>
+          
+            <a href="/tags/降级熔断/" rel="tag"><i class="fa fa-tag"></i> 降级熔断</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/19/JVM内存模型/" rel="next" title="JVM内存模型">
+                <i class="fa fa-chevron-left"></i> JVM内存模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/rifumei.jpg" alt="Adrian Dai">
+            
+              <p class="site-author-name" itemprop="name">Adrian Dai</p>
+              <p class="site-description motion-element" itemprop="description">看板娘赛高！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daiadrian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:daiadrian@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/Adrian_Dai" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库分库分表"><span class="nav-number">1.</span> <span class="nav-text">数据库分库分表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据切分（分库分表）"><span class="nav-number">1.1.</span> <span class="nav-text">数据切分（分库分表）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直切分"><span class="nav-number">1.2.</span> <span class="nav-text">垂直切分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单表"><span class="nav-number">1.2.1.</span> <span class="nav-text">单表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#垂直切分的优缺点"><span class="nav-number">1.2.2.</span> <span class="nav-text">垂直切分的优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#水平切分"><span class="nav-number">1.3.</span> <span class="nav-text">水平切分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#水平切分优缺点"><span class="nav-number">1.3.1.</span> <span class="nav-text">水平切分优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#经典的水平切分规则"><span class="nav-number">1.3.2.</span> <span class="nav-text">经典的水平切分规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分库分表带来的问题及其解决办法"><span class="nav-number">1.4.</span> <span class="nav-text">分库分表带来的问题及其解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么时候需要分库分表"><span class="nav-number">1.5.</span> <span class="nav-text">什么时候需要分库分表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垂直切分和水平切分的联合使用"><span class="nav-number">1.6.</span> <span class="nav-text">垂直切分和水平切分的联合使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库扩容"><span class="nav-number">2.</span> <span class="nav-text">数据库扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存"><span class="nav-number">3.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息队列"><span class="nav-number">4.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用拆分"><span class="nav-number">5.</span> <span class="nav-text">应用拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用限流"><span class="nav-number">6.</span> <span class="nav-text">应用限流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务降级与服务熔断"><span class="nav-number">7.</span> <span class="nav-text">服务降级与服务熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务降级"><span class="nav-number">7.1.</span> <span class="nav-text">服务降级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#降级分类"><span class="nav-number">7.1.1.</span> <span class="nav-text">降级分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务熔断"><span class="nav-number">7.2.</span> <span class="nav-text">服务熔断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务熔断和服务降级比较"><span class="nav-number">7.3.</span> <span class="nav-text">服务熔断和服务降级比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hystrix"><span class="nav-number">7.4.</span> <span class="nav-text">Hystrix</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hystrix能做什么"><span class="nav-number">7.4.1.</span> <span class="nav-text">Hystrix能做什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hystrix设计原则"><span class="nav-number">7.4.2.</span> <span class="nav-text">Hystrix设计原则</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adrian Dai</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"vOffset":-100,"hOffset":0},"mobile":{"show":true,"motion":true},"react":{"opacityDefault":0.9,"opacityOnHover":0.5},"log":false});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>

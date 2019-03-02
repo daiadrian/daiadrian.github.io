@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JVM,栈内存,堆内存,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="线程共享内存区域Java堆​    此内存区域在虚拟机启动的时候创建，几乎所有对象的实例和数组都在堆中分配内存空间。     ​    Java堆是垃圾回收主要的管理区域，而且现在的垃圾收集器基本都采用分代收集算法（这是针对不同分代的特点采用适当的收集算法，提高垃圾收集的效率），所以一般为了在内存方面出发，堆可以分为老年代和新生代。  新生代中，也可以细分为Eden空间，To Survivor空间">
+<meta name="keywords" content="JVM,栈内存,堆内存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM内存模型">
+<meta property="og:url" content="http://yoursite.com/2019/01/19/JVM内存模型/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="线程共享内存区域Java堆​    此内存区域在虚拟机启动的时候创建，几乎所有对象的实例和数组都在堆中分配内存空间。     ​    Java堆是垃圾回收主要的管理区域，而且现在的垃圾收集器基本都采用分代收集算法（这是针对不同分代的特点采用适当的收集算法，提高垃圾收集的效率），所以一般为了在内存方面出发，堆可以分为老年代和新生代。  新生代中，也可以细分为Eden空间，To Survivor空间">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/01/19/JVM内存模型/JVM内存模型/From-To1.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/19/JVM内存模型/JVM内存模型/From-To2.png">
+<meta property="og:updated_time" content="2019-03-02T08:57:05.043Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM内存模型">
+<meta name="twitter:description" content="线程共享内存区域Java堆​    此内存区域在虚拟机启动的时候创建，几乎所有对象的实例和数组都在堆中分配内存空间。     ​    Java堆是垃圾回收主要的管理区域，而且现在的垃圾收集器基本都采用分代收集算法（这是针对不同分代的特点采用适当的收集算法，提高垃圾收集的效率），所以一般为了在内存方面出发，堆可以分为老年代和新生代。  新生代中，也可以细分为Eden空间，To Survivor空间">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/19/JVM内存模型/JVM内存模型/From-To1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/19/JVM内存模型/">
+
+
+
+
+
+  <title>JVM内存模型 | Adrian</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/daiadrian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Adrian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/19/JVM内存模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM内存模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-19T23:16:10+08:00">
+                2019-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="线程共享内存区域"><a href="#线程共享内存区域" class="headerlink" title="线程共享内存区域"></a>线程共享内存区域</h1><h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>​    此内存区域在虚拟机启动的时候创建，几乎所有对象的实例和数组都在堆中分配内存空间。    </p>
+<p>​    Java堆是垃圾回收主要的管理区域，而且现在的垃圾收集器基本都采用分代收集算法（这是针对不同分代的特点采用适当的收集算法，提高垃圾收集的效率），所以一般为了在内存方面出发，堆可以分为老年代和新生代。</p>
+<blockquote>
+<p>新生代中，也可以细分为Eden空间，To Survivor空间和From Survivor空间等。(垃圾收集和对象内存分配在垃圾收集再详细分析)</p>
+<ul>
+<li>这里分为这样的空间是因为采用了标记复制的垃圾收集算法，但是基本的标记复制算法是采用1:1的方式划分空间，这样的话会浪费掉很多内存空间的使用，所以分成了两个Survivor区和一个Eden区（默认1:1:8）</li>
+<li>当Eden区被占满或者Eden区没有办法为新对象分配足够的内存空间时，会触发垃圾回收；垃圾收集后存活的对象会被<strong>复制</strong>到From区，当From区满的时候会将存活的对象<strong>复制</strong>到To区域（此时包括来自Eden区存活的对象），然后这两个区域会交换角色。注意：<font color="blue">Survivor区总是有一个是空的</font>，Survivor-From 区的对象分两类，一类是年轻的对象（分代年龄小），也是复制到 Survivor-To 区，还有一类是老东西，晋升到老年代中。（参考下面两张图片，来源：《<a href="http://www.oracle.com/technetwork/java/javase/memorymanagement-whitepaper-150215.pdf" target="_blank" rel="noopener">Memory Management in the Java HotSpot Virtual Machine</a>》）</li>
+<li>上面说的会将存活对象复制到To区域说得不全面，因为有可能To区域的内存会被占满，然后还有其他存活的对象就没有办法放入到To区中，那么这里就涉及<strong>分配担保机制</strong>了，也就是Survivor区域的空间不够用的时候，这些存活对象会直接通过这个机制进入到老年代中</li>
+<li>虚拟机会给每个对象定义一个对象年龄的计数器，当年轻代的对象经过MinorGC开始复制到Survivor区的时候，对象的年龄会增加1，当对象年龄达到一定程度或者触发分配担保机制的时候会晋升到老年代当中</li>
+</ul>
+</blockquote>
+<p><img src="/2019/01/19/JVM内存模型/./JVM内存模型/From-To1.png" alt="年轻代垃圾收集前"></p>
+<p><img src="/2019/01/19/JVM内存模型/./JVM内存模型/From-To2.png" alt="年轻代垃圾收集后"></p>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>​    方法区主要用于存储被虚拟机加载的类信息（Class相关信息：类名，访问修饰符，字段描述，方法描述等），常量，静态变量，即时编译器编译后的代码等数据。</p>
+<p>​    方法区通常被我们称作：永久代。但是这只是HotSpot VM对方法区的实现而已；在其他的VM（JRockit等）并没有永久代。</p>
+<p>​    注意的是，在JDK1.8中，永久代已经被移除（JDK1.7中，永久代中的运行时常量池被移到堆中），此时HotSpot VM对方法区的实现变成了元空间<code>Metaspace</code> ，元空间和永久代的本质是类似的，<font color="red">不同的地方是元空间并不在虚拟机中，而是使用本地内存（Native Memory）</font>。</p>
+<blockquote>
+<p>在方法区中，对于很多动态生成类的情况容易出现OutOfMemoryError的异常。</p>
+<p>常见的场景就是JSP页面较多的情况（JSP第一次运行需要进行编译）、CGLib增强和动态语言（<em>Groovy</em>）</p>
+</blockquote>
+<h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>​    运行时常量池是属于方法区的一部分（JDK7后被移到堆中）。其用于存储<strong>编译期</strong>生成的字面量和符号引用。</p>
+<blockquote>
+<p>程序运行期间可以通过<code>String.intern()</code> 将变量放入运行时常量池中</p>
+</blockquote>
+<h1 id="线程私有的内存区域"><a href="#线程私有的内存区域" class="headerlink" title="线程私有的内存区域"></a>线程私有的内存区域</h1><h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>程序计数器是当前线程执行的代码的<strong>行号指示器</strong></p>
+<ul>
+<li>当执行Native方法的时候，该计数器值是空的(<code>undefined</code>)</li>
+<li>该内存区域是<font color="red">唯一一个</font>没有规定<code>OutOfMemoryError</code> 情况的区域</li>
+</ul>
+<h2 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h2><p>​    Java虚拟机栈的生命周期与当前线程相同；虚拟机栈是Java方法执行时的内存模型，在方法执行时会创建栈帧存放局部变量表、操作数栈、动态链接和方法出口等信息。</p>
+<p>​    在虚拟机栈中，我们平常主要关注的是局部变量表：</p>
+<ol>
+<li><p>局部变量表的内存空间在编译期间完成分配</p>
+</li>
+<li><p>局部变量表包括基本数据类型、指向字节码指令的地址和对象的引用（即<code>reference</code>）</p>
+<ul>
+<li><p>对象的引用主要有句柄和直接指针的两种方式：</p>
+<ul>
+<li><p>句柄：使用句柄的方式时，JVM会在Java堆中开辟一部分内存作为句柄池，虚拟机栈中的<code>reference</code>中储存的就是句柄的内存地址，句柄则包含了该对象的实例数据和类型数据的内存地址。</p>
+<blockquote>
+<p>类型数据：该类型数据是在方法区中的Class类信息和静态变量等数据</p>
+</blockquote>
+</li>
+<li><p>直接指针：顾名思义就是虚拟机栈中的<code>reference</code>中储存的是该对象的实例数据和类型数据的内存地址。</p>
+</li>
+</ul>
+</li>
+<li><p>两种方式各有各的优劣势：</p>
+<ul>
+<li>句柄：其优势之处就是稳定，当垃圾收集器回收内存中的对象时，该对象要么存活在年轻代要么晋升到老年代，这个时候该对象的内存地址就会发生改变，此时虚拟机栈中<code>reference</code> 的指针就不需要发生改变，只需要改变句柄中对象的内存地址即可。</li>
+<li>直接指针：直接指针访问对象的速度会比句柄快，因为它少了一次指针定位的开销。在大量的对象访问的时候，直接指针的效率是相当的客观。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>线程请求的栈深度大于虚拟机所允许的最大深度，会抛出<code>StackOverflowError</code>异常</p>
+<blockquote>
+<p>这里的意思是：Java方法的从执行到结束就相当于将一个栈帧在虚拟机栈中的入栈和出栈的过程；当一个死循环的递归方法调用时，就会抛出StackOverflowError；因为死循环的递归，会不断的往虚拟机栈中压入栈帧，当达到最大深度时，则抛出该异常。</p>
+</blockquote>
+<p>虚拟机在动态扩展时，无法为栈分配足够的内存空间时会抛出<code>OutOfMemoryError</code>异常</p>
+<blockquote>
+<p>这里有容易会和上面那个混淆，唯一需要分清的是当栈空间不够分配的时候：这种情况下是因为内存不足还是栈的深度不够的问题就能分清楚这两种情况了。</p>
+</blockquote>
+</blockquote>
+<hr>
+<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>​    本地方法栈跟Java虚拟机栈的作用基本上是相同的，不同之处是Java虚拟机栈服务的是Java方法，而本地方法栈服务的对象是Native方法</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+            <a href="/tags/栈内存/" rel="tag"><i class="fa fa-tag"></i> 栈内存</a>
+          
+            <a href="/tags/堆内存/" rel="tag"><i class="fa fa-tag"></i> 堆内存</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/14/秒杀总结/" rel="next" title="商品秒杀系统技术总结">
+                <i class="fa fa-chevron-left"></i> 商品秒杀系统技术总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/02/高并发场景下的优化/" rel="prev" title="高并发场景下的优化">
+                高并发场景下的优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/rifumei.jpg" alt="Adrian Dai">
+            
+              <p class="site-author-name" itemprop="name">Adrian Dai</p>
+              <p class="site-description motion-element" itemprop="description">看板娘赛高！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daiadrian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:daiadrian@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/Adrian_Dai" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程共享内存区域"><span class="nav-number">1.</span> <span class="nav-text">线程共享内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java堆"><span class="nav-number">1.1.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法区"><span class="nav-number">1.2.</span> <span class="nav-text">方法区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.2.1.</span> <span class="nav-text">运行时常量池</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程私有的内存区域"><span class="nav-number">2.</span> <span class="nav-text">线程私有的内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#程序计数器"><span class="nav-number">2.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java虚拟机栈"><span class="nav-number">2.2.</span> <span class="nav-text">Java虚拟机栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地方法栈"><span class="nav-number">2.3.</span> <span class="nav-text">本地方法栈</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adrian Dai</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"vOffset":-100,"hOffset":0},"mobile":{"show":true,"motion":true},"react":{"opacityDefault":0.9,"opacityOnHover":0.5},"log":false});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
