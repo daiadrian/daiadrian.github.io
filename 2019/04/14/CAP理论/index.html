@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="CAP,Base理论,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CAP理论 什么是CAP理论​    CAP理论指的是在一个分布式系统中，不能同时满足一致性，可用性和分区容错性  C（Consistency）：一致性  在分布式系统中的所有数据备份，在同一时刻是否是同样的值   A（Availabe）：可用性  ​    可用性指在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求 ​    可用性是指系统提供的服务必须一直处于可用的状态，对于用户的">
+<meta name="keywords" content="CAP,Base理论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAP理论">
+<meta property="og:url" content="http://yoursite.com/2019/04/14/CAP理论/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="CAP理论 什么是CAP理论​    CAP理论指的是在一个分布式系统中，不能同时满足一致性，可用性和分区容错性  C（Consistency）：一致性  在分布式系统中的所有数据备份，在同一时刻是否是同样的值   A（Availabe）：可用性  ​    可用性指在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求 ​    可用性是指系统提供的服务必须一直处于可用的状态，对于用户的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-13T16:07:08.186Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CAP理论">
+<meta name="twitter:description" content="CAP理论 什么是CAP理论​    CAP理论指的是在一个分布式系统中，不能同时满足一致性，可用性和分区容错性  C（Consistency）：一致性  在分布式系统中的所有数据备份，在同一时刻是否是同样的值   A（Availabe）：可用性  ​    可用性指在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求 ​    可用性是指系统提供的服务必须一直处于可用的状态，对于用户的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/14/CAP理论/">
+
+
+
+
+
+  <title>CAP理论 | Adrian</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/daiadrian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Adrian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/14/CAP理论/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CAP理论</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T23:00:10+08:00">
+                2019-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>CAP理论</p>
+<h2 id="什么是CAP理论"><a href="#什么是CAP理论" class="headerlink" title="什么是CAP理论"></a>什么是CAP理论</h2><p>​    CAP理论指的是在一个<strong>分布式系统</strong>中，不能同时满足一致性，可用性和分区容错性</p>
+<ol>
+<li><p>C（Consistency）：一致性</p>
+<blockquote>
+<p>在分布式系统中的所有数据备份，在同一时刻是否是同样的值</p>
+</blockquote>
+</li>
+<li><p>A（Availabe）：可用性</p>
+<blockquote>
+<p>​    可用性指在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求</p>
+<p>​    可用性是指系统提供的服务必须一直处于可用的状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。“有效的时间内”是指，对于用户的一个操作请求，<strong>系统必须能够在指定的时间（即响应时间）内返回对应的处理结果，如果超过了这个时间范围，那么系统就被认为是不可用的</strong></p>
+</blockquote>
+</li>
+<li><p>P（Partition Tolenrance）：分区容错性</p>
+<blockquote>
+<p>​    以实际效果而言，分区相当于对通信的时限要求。系统如果不能在时限内达成数据一致性，就意味着发生了分区的情况，必须就当前操作在C和A之间做出选择，也就是说无论任何消息丢失，系统都可用</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="分区容错性"><a href="#分区容错性" class="headerlink" title="分区容错性"></a>分区容错性</h3><p>​    分区容错性约束了一个分布式系统具有如下特性：<font color="red">分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和可用性的服务，除非是整个网络环境都发生了故障</font></p>
+<p><strong>网络分区</strong></p>
+<p>​    网络分区是指在分布式系统中，不同的节点分布在不同的子网络（机房或异地网络）中，由于一些特殊的原因导致这些子网络出现网络不连通的状况；但各个子网络的内部网络是正常的，从而导致整个系统的网络环境被切分成了若干个孤立的区域。</p>
+<p>​    需要注意的是，组成一个分布式系统的每个节点的加入与退出都可以看作是一个特殊的网络分区</p>
+<h3 id="Consistency一致性强弱"><a href="#Consistency一致性强弱" class="headerlink" title="Consistency一致性强弱"></a>Consistency一致性强弱</h3><p>​    一致性是指从系统外部读取系统内部的数据时，在一定约束条件下相同，即<strong><font color="red">数据变动在系统内部各节点应该是同步的</font></strong></p>
+<p>根据一致性强弱可分为：</p>
+<ol>
+<li><strong>强一致性</strong>（Strong Consistency）任何时刻，任何用户都能读取到最近一次成功更新的数据</li>
+<li><strong>单调一致性</strong>（Monotonic Consistency）任何时刻，任何用户一旦读到某个数据在某次更新后的值，那么就不会再读到比这个值更旧的值。也就是说<strong>可获取的数据顺序必是单调递增的</strong></li>
+<li><strong>会话一致性</strong>（Session Consistency）任何用户在某次会话中，一旦读到某个数据在某次更新后的值，那么在<font color="blue">本次会话中就不会再读到比这个值更旧的值</font>。<u>会话一致性是在单调一致性的基础上进一步放松约束，只保证单个用户单个会话内的单调性，在不同用户或同一用户不同会话间则没有保障</u></li>
+<li><strong>最终一致性</strong>（Eventual Consistency）用户只能读到某次更新后的值，<font color="blue">但系统保证数据将最终达到完全一致的状态，只是所需时间不能保障</font></li>
+<li><strong>弱一致性</strong>（Weak Consistency）用户无法在确定时间内读到最新更新的值</li>
+</ol>
+<h3 id="CAP的抉择"><a href="#CAP的抉择" class="headerlink" title="CAP的抉择"></a>CAP的抉择</h3><table>
+<thead>
+<tr>
+<th><strong>选    择</strong></th>
+<th style="text-align:left"><strong>说    明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CA</td>
+<td style="text-align:left">放弃分区容错性，加强一致性和可用性，其实就是传统的单机数据库的选择</td>
+</tr>
+<tr>
+<td>AP</td>
+<td style="text-align:left">放弃一致性（这里说的一致性是强一致性），追求分区容错性和可用性，这是很多分布式系统设计时的选择，例如很多NoSQL系统就是如此</td>
+</tr>
+<tr>
+<td>CP</td>
+<td style="text-align:left">放弃可用性，追求一致性和分区容错性，基本不会选择，网络问题会直接让整个系统不可用</td>
+</tr>
+</tbody>
+</table>
+<h4 id="简单的CAP例子"><a href="#简单的CAP例子" class="headerlink" title="简单的CAP例子"></a>简单的CAP例子</h4><p>​    一个DB服务   搭建在两个机房（北京,广州)，两个DB实例同时提供写入和读取    </p>
+<ol>
+<li><p><strong>假设DB的更新操作是同时写北京和广州的DB都成功才返回成功</strong></p>
+<blockquote>
+<p>在没有出现网络故障的时候，满足CA原则</p>
+<ul>
+<li>C 即我的任何一个写入，更新操作成功并返回客户端完成后，分布式的所有节点在同一时间的数据完全一致</li>
+<li>A 即我的读写操作都能够成功</li>
+</ul>
+<font color="blue">但是当出现网络故障时，我不能同时保证CA，即P条件无法满足</font>
+</blockquote>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>假设DB的更新操作是只写本地机房成功就返回，通过binlog/oplog回放方式同步至侧边机房</strong></p>
+<blockquote>
+<p>​    这种操作保证了在出现网络故障时，双边机房都是可以提供服务的，且读写操作都能成功，意味着他满足了AP </p>
+<p>​    但是它不满足C，因为更新操作返回成功后，双边机房的DB看到的数据会存在<strong><font color="red">短暂数据不一致</font></strong>，且在网络故障时，不一致的时间差会很大（仅能保证最终一致性）</p>
+</blockquote>
+</li>
+</ol>
+<ol start="3">
+<li><p><strong>假设DB的更新操作是同时写北京和广州的DB都成功才返回成功且网络故障时提供降级服务</strong></p>
+<blockquote>
+<p>降级服务，如停止写入，只提供读取功能，这样能保证数据是一致的，且网络故障时能提供服务，满足CP原则，但是这无法满足可用性原则</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="选择权衡"><a href="#选择权衡" class="headerlink" title="选择权衡"></a>选择权衡</h4><p>​    对于一个分布式系统而言，分区容错性是一个最基本的要求。因为既然是一个分布式系统，那么<u>分布式系统中的组件必然需要被部署到不同的节点</u>，因此必然出现子网络。而对于分布式系统而言，网络问题又是一个必定会出现的异常情况，因此分区容错性也就成为了一个分布式系统必然需要面对和解决的问题。因此系统往往需要根据业务特点在C（一致性）和A（可用性）之间寻求平衡</p>
+<p>​    对于大多数互联网应用来说，因为机器数量庞大，部署节点分散，网络故障是常态，可用性是必须需要保证的，所以只有舍弃强一致性（可以保证最终一致性）来保证服务的AP</p>
+<p>​    但是对于需要确保强一致性的场景，如银行业务，通常会权衡CA和CP模型，CA模型网络故障时完全不可用，CP模型具备部分可用性，实际的选择需要通过业务场景来权衡（并不是所有情况CP都好于CA，只能查看信息不能更新信息有时候从产品层面还不如直接拒绝服务）</p>
+<h3 id="Base理论"><a href="#Base理论" class="headerlink" title="Base理论"></a>Base理论</h3><p>​    BASE理论是对CAP中一致性和可用性权衡的结果，其来源于对大规模互联网系统分布式实践的总结，是基于CAP定理逐步演化而来的。</p>
+<p>​    BASE理论的核心思想是：<strong><font color="red">即使无法做到强一致性，但每个应用都可以根据自身业务特点，采用适当的方式来使系统达到最终一致性</font></strong></p>
+<ol>
+<li><p>Basically Available（基本可用）</p>
+<blockquote>
+<p>基本可用是指分布式系统在出现不可预知故障的时候，<font color="blue">允许损失部分可用性</font></p>
+<p>注意，这绝不等价于系统不可用。如：</p>
+<ul>
+<li><p>响应时间上的损失。正常情况下，一个在线搜索引擎需要在0.5秒之内返回给用户相应的查询结果，但由于出现故障，查询结果的响应时间增加了1~2秒</p>
+</li>
+<li><p>系统功能上的损失：正常情况下，在一个电子商务网站上进行购物的时候，消费者几乎能够顺利完成每一笔订单，但是在一些节日大促购物高峰的时候，由于消费者的购物行为激增，为了保护购物系统的稳定性，部分消费者可能会被引导到一个降级页面</p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p>Soft state（软状态）</p>
+<blockquote>
+<p>​    软状态指允许系统中的数据存在中间状态，并认为该中间状态的存在不会影响系统的整体可用性，即<strong>允许系统在不同节点的数据副本之间进行数据同步的过程存在延时</strong></p>
+</blockquote>
+</li>
+<li><p>Eventually consistent（最终一致性）</p>
+<blockquote>
+<p>​    最终一致性强调的是所有的数据副本，在经过一段时间的同步之后，最终都能够达到一个一致的状态</p>
+<p>​    因此，最终一致性的本质是需要系统保证最终数据能够达到一致，而不需要实时保证系统数据的强一致性</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="最终一致性变种"><a href="#最终一致性变种" class="headerlink" title="最终一致性变种"></a>最终一致性变种</h4><ol>
+<li><p>因果一致性：</p>
+<blockquote>
+<p>​    因果一致性是指：如果进程A在更新完某个数据项后通知了进程B，那么进程B之后对该数据项的访问都应该能够获取到进程A更新后的最新值，并且如果进程B要对该数据项进行更新操作的话，务必基于进程A更新后的最新值，即不能发生丢失更新情况。与此同时，与进程A无因果关系的进程C的数据访问则没有这样的限制</p>
+</blockquote>
+</li>
+<li><p>读己之所写：</p>
+<blockquote>
+<p>​    读己之所写是指：进程A更新一个数据项之后，它自己总是能够访问到更新过的最新值，而不会看到旧值。</p>
+<p>​    也就是说，对于单个数据获取者而言，其读取到的数据一定不会比自己上次写入的值旧。因此，读己之所写也可以看作是一种特殊的因果一致性</p>
+</blockquote>
+</li>
+<li><p>会话一致性：</p>
+<blockquote>
+<p>​    会话一致性将对系统数据的访问过程框定在了一个会话当中：系统能保证在同一个有效的会话中实现“读己之所写”的一致性</p>
+<p>​    也就是说，执行更新操作之后，客户端能够在同一个会话中始终读取到该数据项的最新值</p>
+</blockquote>
+</li>
+<li><p>单调读一致性：</p>
+<blockquote>
+<p>​       单调读一致性是指：如果一个进程从系统中读取出一个数据项的某个值后，那么系统对于该进程后续的任何数据访问都不应该返回更旧的值</p>
+</blockquote>
+</li>
+<li><p>单调写一致性：</p>
+<blockquote>
+<p> 单调写一致性是指：一个系统需要能够保证来自同一个进程的写操作被顺序地执行</p>
+</blockquote>
+</li>
+</ol>
+<p>​    总的来说：BASE理论面向的是大型高可用可扩展的分布式系统，和传统事务的ACID特性使相反的，它完全不同于ACID的强一致性模型，而是<strong>通过牺牲强一致性来获得可用性，并允许数据在一段时间内是不一致的，但最终达到一致状态</strong>。</p>
+<p>​    在实际的分布式场景中，不同业务单元和组件对数据一致性的要求是不同的，因此在具体的分布式系统架构设计过程中，ACID特性与BASE理论往往又会结合在一起使用</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CAP/" rel="tag"><i class="fa fa-tag"></i> CAP</a>
+          
+            <a href="/tags/Base理论/" rel="tag"><i class="fa fa-tag"></i> Base理论</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/02/高并发场景下的优化/" rel="next" title="高并发场景下的优化">
+                <i class="fa fa-chevron-left"></i> 高并发场景下的优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/rifumei.jpg" alt="Adrian Dai">
+            
+              <p class="site-author-name" itemprop="name">Adrian Dai</p>
+              <p class="site-description motion-element" itemprop="description">看板娘赛高！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daiadrian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:daiadrian@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/Adrian_Dai" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是CAP理论"><span class="nav-number">1.</span> <span class="nav-text">什么是CAP理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分区容错性"><span class="nav-number">1.1.</span> <span class="nav-text">分区容错性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consistency一致性强弱"><span class="nav-number">1.2.</span> <span class="nav-text">Consistency一致性强弱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP的抉择"><span class="nav-number">1.3.</span> <span class="nav-text">CAP的抉择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的CAP例子"><span class="nav-number">1.3.1.</span> <span class="nav-text">简单的CAP例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择权衡"><span class="nav-number">1.3.2.</span> <span class="nav-text">选择权衡</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Base理论"><span class="nav-number">1.4.</span> <span class="nav-text">Base理论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最终一致性变种"><span class="nav-number">1.4.1.</span> <span class="nav-text">最终一致性变种</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adrian Dai</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"vOffset":-100,"hOffset":0},"mobile":{"show":true,"motion":true},"react":{"opacityDefault":0.9,"opacityOnHover":0.5},"log":false});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
