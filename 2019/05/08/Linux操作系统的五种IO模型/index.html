@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Adrian">
 <meta property="og:description" content="Linux操作系统的五种IO模型 Linux系统的IO​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为两个阶段  将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段） 然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）  在了解五种模型">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/信号驱动IO模型.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/IO多路复用模型.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/异步IO模型.jpg">
-<meta property="og:updated_time" content="2019-05-08T13:26:20.054Z">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/信号驱动IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/IO多路复用模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/异步IO模型.jpg">
+<meta property="og:updated_time" content="2019-05-08T14:12:51.543Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux操作系统的五种IO模型">
 <meta name="twitter:description" content="Linux操作系统的五种IO模型 Linux系统的IO​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为两个阶段  将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段） 然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）  在了解五种模型">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
 
 
 
@@ -388,17 +388,17 @@
 </ul>
 <h3 id="同步阻塞IO模型"><a href="#同步阻塞IO模型" class="headerlink" title="同步阻塞IO模型"></a>同步阻塞IO模型</h3><p>​    同步阻塞UI模型是最简单的IO模型，用户线程在内核进行IO操作的时候被阻塞；用户线程通过系统调用<code>recvfrom</code> 发起IO读操作，由用户空间转到内核空间。内核等到数据包到达后，再将接受的数据拷贝到用户空间，这才能完成一次读操作。</p>
 <p>​    但是用户在进行读操作的时候，由于内核还不能立刻准备好数据包，应用进程就会阻塞住，直到内核准备好数据包，<code>recvfrom</code> 完成数据报复制工作，应用进程才能结束阻塞状态；这就导致用户在发起IO请求时，不能再进行其他任何操作，这<strong><font color="red">对CPU的资源利用率是很低的</font></strong></p>
-<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/同步阻塞IO模型.jpg" alt="同步阻塞IO模型"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg" alt="同步阻塞IO模型"></p>
 <h3 id="同步非阻塞IO模型"><a href="#同步非阻塞IO模型" class="headerlink" title="同步非阻塞IO模型"></a>同步非阻塞IO模型</h3><p>​    用户线程在发起IO请求后立即返回，但是此时并没有读取到任何数据，用户线程需要不断的通过 <code>recvfrom</code> 调用去和内核交互，直到内核准备好数据（即轮询机制）。如果没有准备好，内核会返回<code>error</code>，应用进程在得到<code>error</code>后，过一段时间再发送<code>recvfrom</code>请求。在两次发送请求的时间段，进程可以先做别的事情</p>
 <p>​    整个IO请求的过程，虽然用户线程立即返回了，但是为了得到数据还是需要通过轮询机制去请求是否准备好数据；重复的请求会<strong><font color="red">消耗大量的CPU资源</font></strong>，一般很少会直接使用这个模型</p>
-<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg" alt="同步非阻塞IO模型"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg" alt="同步非阻塞IO模型"></p>
 <h3 id="信号驱动IO模型"><a href="#信号驱动IO模型" class="headerlink" title="信号驱动IO模型"></a>信号驱动IO模型</h3><p>​    用户进程可以通过sigaction系统调用注册一个信号处理程序，然后主程序返回不会阻塞；当有IO操作准备就绪时，由内核通知触发一个SIGIO信号处理程序执行，然后将用户进程再通过<code>recvfrom</code>将数据从内核空间拷贝到用户空间（数据拷贝是同步的）</p>
 <p>​    这种模型的优势在于等到数据包到达期间进程不会被阻塞，用户主程序可以继续执行，只要等待来自信号处理函数的通知即可（此模式实现复杂，不常用）</p>
-<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/信号驱动IO模型.jpg" alt="信号驱动IO模型"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/信号驱动IO模型.jpg" alt="信号驱动IO模型"></p>
 <h3 id="IO多路复用模型"><a href="#IO多路复用模型" class="headerlink" title="IO多路复用模型"></a>IO多路复用模型</h3><p>​    多个进程的IO可以注册到同一个<code>select</code>上，当用户进程调用该<code>select</code>，<code>select</code>会监听所有注册好的IO，如果所有被监听的IO需要的数据都没有准备好时，<strong>进程调用<code>select</code>后会阻塞</strong>；当任意一个IO所需的数据准备好之后，<code>select</code>调用就会返回，然后用户进程在通过<code>recvfrom</code>来进行数据拷贝</p>
 <p>​    虽然<code>select</code>可以同时监控多个IO操作，但是<strong>每个IO请求过程还是会阻塞（阻塞在select函数）</strong>的；进程在发出<code>select</code>后，要等到<code>select</code>监听的所有IO操作中至少有一个需要的数据准备好，才会有返回，并且也需要再次发送请求去进行文件的拷贝</p>
 <p>​    所以<strong>如果处理的连接数不是很高的话</strong>，使用<strong>IO多路复用不一定</strong>比使用<strong>多线程 + 阻塞 IO</strong>的性能更好，可能延迟还更大。<font color="red">IO多路复用的优势并不是对于单个连接能处理得更快，而是在于能<strong>处理更多的连接</strong></font></p>
-<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/IO多路复用模型.jpg" alt="IO多路复用模型"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/IO多路复用模型.jpg" alt="IO多路复用模型"></p>
 <h4 id="select、poll、epoll"><a href="#select、poll、epoll" class="headerlink" title="select、poll、epoll"></a>select、poll、epoll</h4><p><code>select</code>，<code>poll</code>，<code>epoll</code> 都是多路复用IO的函数；其三者的区别在于：</p>
 <ol>
 <li><font color="green"><strong>select</strong></font><ul>
@@ -424,7 +424,7 @@
 <li>信号驱动IO是由内核通知用户进程何时进行IO操作，而异步IO是内核把数据拷贝到用户空间后才通知用户进程IO操作何时完成</li>
 <li>信号驱动还需要用户进程阻塞在从内核空间缓冲区拷贝数据到用户空间，而异步IO是内核直接把所有数据准备好并且拷贝到用户空间后才通知用户进程可以进行后续的操作；<font color="red"><strong>即数据准备阶段两者都是非阻塞的，而数据拷贝阶段，信号驱动是阻塞的而异步IO是非阻塞的</strong></font></li>
 </ol>
-<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/异步IO模型.jpg" alt="异步IO模型"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/异步IO模型.jpg" alt="异步IO模型"></p>
 
       
     </div>
