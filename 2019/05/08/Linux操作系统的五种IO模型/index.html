@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="正向代理,反向代理,">
+  <meta name="keywords" content="IO模型,">
 
 
 
@@ -79,20 +79,24 @@
 
 
 
-<meta name="description" content="正向代理和反向代理 正向代理​    正向代理是一个位于客户端和原始服务器（origin server）之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个请求并指定目标（原始服务器），然后代理向原始服务器转交请求并将获得的内容返回给客户端。 ​    正向代理，其实是”代理服务器”代理了”客户端”，去和”目标服务器”进行交互；客户端必须要进行一些特别的设置才能使用正向代理 ​    举个">
-<meta name="keywords" content="正向代理,反向代理">
+<meta name="description" content="Linux操作系统的五种IO模型 Linux系统的IO​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为两个阶段  将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段） 然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）  在了解五种模型">
+<meta name="keywords" content="IO模型">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正向代理和反向代理">
-<meta property="og:url" content="http://yoursite.com/2019/05/06/正向代理和反向代理/index.html">
+<meta property="og:title" content="Linux操作系统的五种IO模型">
+<meta property="og:url" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/index.html">
 <meta property="og:site_name" content="Adrian">
-<meta property="og:description" content="正向代理和反向代理 正向代理​    正向代理是一个位于客户端和原始服务器（origin server）之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个请求并指定目标（原始服务器），然后代理向原始服务器转交请求并将获得的内容返回给客户端。 ​    正向代理，其实是”代理服务器”代理了”客户端”，去和”目标服务器”进行交互；客户端必须要进行一些特别的设置才能使用正向代理 ​    举个">
+<meta property="og:description" content="Linux操作系统的五种IO模型 Linux系统的IO​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为两个阶段  将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段） 然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）  在了解五种模型">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/05/06/正向代理和反向代理/正向代理和反向代理/代理.png">
-<meta property="og:updated_time" content="2019-05-06T13:25:19.128Z">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/信号驱动IO模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/IO多路复用模型.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/异步IO模型.jpg">
+<meta property="og:updated_time" content="2019-05-08T13:26:20.054Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正向代理和反向代理">
-<meta name="twitter:description" content="正向代理和反向代理 正向代理​    正向代理是一个位于客户端和原始服务器（origin server）之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个请求并指定目标（原始服务器），然后代理向原始服务器转交请求并将获得的内容返回给客户端。 ​    正向代理，其实是”代理服务器”代理了”客户端”，去和”目标服务器”进行交互；客户端必须要进行一些特别的设置才能使用正向代理 ​    举个">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/06/正向代理和反向代理/正向代理和反向代理/代理.png">
+<meta name="twitter:title" content="Linux操作系统的五种IO模型">
+<meta name="twitter:description" content="Linux操作系统的五种IO模型 Linux系统的IO​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为两个阶段  将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段） 然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）  在了解五种模型">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/Linux操作系统的五种IO模型/同步阻塞IO模型.jpg">
 
 
 
@@ -122,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/06/正向代理和反向代理/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/">
 
 
 
 
 
-  <title>正向代理和反向代理 | Adrian</title>
+  <title>Linux操作系统的五种IO模型 | Adrian</title>
   
 
 
@@ -265,7 +269,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/正向代理和反向代理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/08/Linux操作系统的五种IO模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Adrian Dai">
@@ -282,7 +286,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">正向代理和反向代理</h1>
+          <h1 class="post-title" itemprop="name headline">Linux操作系统的五种IO模型</h1>
         
 
         <div class="post-meta">
@@ -294,8 +298,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T21:23:20+08:00">
-                2019-05-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-08T21:23:09+08:00">
+                2019-05-08
               </time>
             
 
@@ -317,8 +321,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式</span>
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
                   </a>
                 </span>
 
@@ -354,61 +358,73 @@
       
 
       
-        <p>正向代理和反向代理</p>
-<h3 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h3><p>​    正向代理是一个<font color="red">位于客户端和原始服务器</font>（origin server）之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个请求并指定目标（原始服务器），然后代理向原始服务器转交请求并将获得的内容返回给客户端。</p>
-<p>​    <strong>正向代理，其实是”代理服务器”代理了”客户端”，去和”目标服务器”进行交互</strong>；客户端必须要进行一些特别的设置才能使用正向代理</p>
-<p>​    举个栗子：一个国内用户访问不了Google，但是他能访问到一个代理服务器，这个代理服务器能够访问Google，于是该用户需要先连上代理服务器，然后告诉代理服务器需要访问哪个网站的内容，代理服务器去将网站内容取回来，然后返回给用户。从网站的角度，只在代理服务器来取内容的时候有一次记录，有时候并不知道是用户的请求，也隐藏了用户的资料，这取决于代理告不告诉访问的网站</p>
-<h4 id="正向代理的用途"><a href="#正向代理的用途" class="headerlink" title="正向代理的用途"></a>正向代理的用途</h4><ol>
-<li><p><strong>突破访问限制</strong> </p>
-<p>​    通过代理服务器，可以突破自身IP访问限制，访问国外网站等</p>
+        <p>Linux操作系统的五种IO模型</p>
+<h3 id="Linux系统的IO"><a href="#Linux系统的IO" class="headerlink" title="Linux系统的IO"></a>Linux系统的IO</h3><p>​    Java中常说的IO是指文件的输入和输出；而在操作系统中的一次IO可以简化成把数据从硬件（硬盘）中读取到用户空间中；详细分为<font color="blue">两个阶段</font></p>
+<ul>
+<li>将数据从磁盘文件先加载到内核内存空间（缓存区），等待数据准备完成，此过程时间较长。（准备数据的阶段）</li>
+<li>然后将数据从内核缓冲区复制到用户空间的进程内存中，此过程时间较短（拷贝数据阶段）</li>
+</ul>
+<p>在了解五种模型前先知道一些名词</p>
+<ul>
+<li><p>同步/异步：关注点是消息的通信机制</p>
+<ul>
+<li>同步：调用者等到被调用者返回消息，才能继续往下执行</li>
+<li>异步：被调用者通过状态、通知或者回调机制主动通知调用者当前被调用者的状态</li>
+</ul>
 </li>
-<li><p><strong>提高访问速度</strong></p>
-<p>​    通常代理服务器都设置一个较大的硬盘缓冲区，会将部分请求的响应保存到缓冲区中，当其他用户再访问相同的信息时， 则直接由缓冲区中取出信息，传给用户，以提高访问速度</p>
+<li><p>阻塞/非阻塞：关注点是调用者在等待结果返回之前所处的状态</p>
+<ul>
+<li>阻塞：指在IO操作彻底完成后才返回到用户空间，在获得调用结果之前被挂起</li>
+<li>非阻塞：指在发起IO操作后立即返回给用户一个状态值，无须等到IO操作彻底完成才返回；在调用结果返回之前，用户进程不会被挂起</li>
+</ul>
 </li>
-<li><p><strong>隐藏客户端真实IP</strong></p>
-<p>​    上网者也可以通过这种方法隐藏自己的IP，免受攻击</p>
+<li><p>文件描述符FD</p>
+<blockquote>
+<p>​    文件描述符（File descriptor）是计算机科学中的一个术语，是一个用于表述指向文件的引用的抽象化概念。文件描述符在形式上是一个非负整数</p>
+<p>​    实际上它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符</p>
+<p>​    在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。但是文件描述符这一概念往往只适用于UNIX、Linux这样的操作系统</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="同步阻塞IO模型"><a href="#同步阻塞IO模型" class="headerlink" title="同步阻塞IO模型"></a>同步阻塞IO模型</h3><p>​    同步阻塞UI模型是最简单的IO模型，用户线程在内核进行IO操作的时候被阻塞；用户线程通过系统调用<code>recvfrom</code> 发起IO读操作，由用户空间转到内核空间。内核等到数据包到达后，再将接受的数据拷贝到用户空间，这才能完成一次读操作。</p>
+<p>​    但是用户在进行读操作的时候，由于内核还不能立刻准备好数据包，应用进程就会阻塞住，直到内核准备好数据包，<code>recvfrom</code> 完成数据报复制工作，应用进程才能结束阻塞状态；这就导致用户在发起IO请求时，不能再进行其他任何操作，这<strong><font color="red">对CPU的资源利用率是很低的</font></strong></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/同步阻塞IO模型.jpg" alt="同步阻塞IO模型"></p>
+<h3 id="同步非阻塞IO模型"><a href="#同步非阻塞IO模型" class="headerlink" title="同步非阻塞IO模型"></a>同步非阻塞IO模型</h3><p>​    用户线程在发起IO请求后立即返回，但是此时并没有读取到任何数据，用户线程需要不断的通过 <code>recvfrom</code> 调用去和内核交互，直到内核准备好数据（即轮询机制）。如果没有准备好，内核会返回<code>error</code>，应用进程在得到<code>error</code>后，过一段时间再发送<code>recvfrom</code>请求。在两次发送请求的时间段，进程可以先做别的事情</p>
+<p>​    整个IO请求的过程，虽然用户线程立即返回了，但是为了得到数据还是需要通过轮询机制去请求是否准备好数据；重复的请求会<strong><font color="red">消耗大量的CPU资源</font></strong>，一般很少会直接使用这个模型</p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/同步非阻塞IO模型.jpg" alt="同步非阻塞IO模型"></p>
+<h3 id="信号驱动IO模型"><a href="#信号驱动IO模型" class="headerlink" title="信号驱动IO模型"></a>信号驱动IO模型</h3><p>​    用户进程可以通过sigaction系统调用注册一个信号处理程序，然后主程序返回不会阻塞；当有IO操作准备就绪时，由内核通知触发一个SIGIO信号处理程序执行，然后将用户进程再通过<code>recvfrom</code>将数据从内核空间拷贝到用户空间（数据拷贝是同步的）</p>
+<p>​    这种模型的优势在于等到数据包到达期间进程不会被阻塞，用户主程序可以继续执行，只要等待来自信号处理函数的通知即可（此模式实现复杂，不常用）</p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/信号驱动IO模型.jpg" alt="信号驱动IO模型"></p>
+<h3 id="IO多路复用模型"><a href="#IO多路复用模型" class="headerlink" title="IO多路复用模型"></a>IO多路复用模型</h3><p>​    多个进程的IO可以注册到同一个<code>select</code>上，当用户进程调用该<code>select</code>，<code>select</code>会监听所有注册好的IO，如果所有被监听的IO需要的数据都没有准备好时，<strong>进程调用<code>select</code>后会阻塞</strong>；当任意一个IO所需的数据准备好之后，<code>select</code>调用就会返回，然后用户进程在通过<code>recvfrom</code>来进行数据拷贝</p>
+<p>​    虽然<code>select</code>可以同时监控多个IO操作，但是<strong>每个IO请求过程还是会阻塞（阻塞在select函数）</strong>的；进程在发出<code>select</code>后，要等到<code>select</code>监听的所有IO操作中至少有一个需要的数据准备好，才会有返回，并且也需要再次发送请求去进行文件的拷贝</p>
+<p>​    所以<strong>如果处理的连接数不是很高的话</strong>，使用<strong>IO多路复用不一定</strong>比使用<strong>多线程 + 阻塞 IO</strong>的性能更好，可能延迟还更大。<font color="red">IO多路复用的优势并不是对于单个连接能处理得更快，而是在于能<strong>处理更多的连接</strong></font></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/IO多路复用模型.jpg" alt="IO多路复用模型"></p>
+<h4 id="select、poll、epoll"><a href="#select、poll、epoll" class="headerlink" title="select、poll、epoll"></a>select、poll、epoll</h4><p><code>select</code>，<code>poll</code>，<code>epoll</code> 都是多路复用IO的函数；其三者的区别在于：</p>
+<ol>
+<li><font color="green"><strong>select</strong></font><ul>
+<li>select函数会无差别轮询所有流，找出能读出数据，或者写入数据的流，对他们进行操作。所以<strong>select具有O(n)的无差别轮询复杂度</strong>，同时处理的流越多，无差别轮询时间就越长</li>
+<li>select目前几乎在所有的平台上支持，其良好跨平台支持也是它的一个优点</li>
+<li>其缺点在于单个进程<strong>能够监视的文件描述符的数量存在最大限制</strong>，在Linux上32位机默认是1024个，64位机默认是2048。也可以通过修改宏定义甚至重新编译内核的方式提升这一限制，但是这样也会造成效率的降低</li>
+</ul>
+</li>
+<li><font color="green"><strong>poll</strong></font><ul>
+<li>poll本质上和select没有区别， <strong><font color="blue">但是它没有最大连接数的限制</font></strong>，原因是它是基于链表来存储的（select是数组存储）</li>
+</ul>
+</li>
+<li><font color="green"><strong>epoll</strong></font><ul>
+<li>epoll是通过事件通知的方式（事件关联上fd），只要有可写的IO就会通过回调的方式告知用户进程</li>
+<li>epoll的最大连接数也是没有限制的，其基于哈希表来存储</li>
+</ul>
 </li>
 </ol>
-<h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>​    反向代理（Reverse Proxy）是指以代理服务器来接受Internet上的连接请求，然后<font color="red">将请求转发给<strong>内部网络</strong>上的服务器</font>，并将从服务器上得到的结果返回给Internet上请求连接的客户端，<u>此时代理服务器对外就表现为一个服务器</u></p>
-<p>​    <strong>反向代理，其实是”代理服务器”代理了”目标服务器”，去和”客户端”进行交互</strong>；通过反向代理服务器访问目标服务器时，客户端是不知道真正的目标服务器是谁的，甚至不知道自己访问的是一个代理</p>
-<h4 id="反向代理的用途"><a href="#反向代理的用途" class="headerlink" title="反向代理的用途"></a>反向代理的用途</h4><ol>
-<li><p><strong>隐藏服务器真实IP</strong></p>
-<p>​    使用反向代理，可以对客户端隐藏服务器的IP地址</p>
-</li>
-<li><p><strong>负载均衡</strong></p>
-<p>​    反向代理服务器可以做负载均衡</p>
-<p>​    根据所有真实服务器的负载情况，将客户端请求分发到不同的真实服务器上</p>
-</li>
-<li><p><strong>提高访问速度</strong></p>
-<p>反向代理服务器可以对于静态内容及短时间内有大量访问请求的动态内容<strong><font color="blue">提供缓存服务</font></strong>，提高访问速度</p>
-</li>
-<li><p><strong>提供安全保障</strong></p>
-<p>​    反向代理服务器可以作为应用层防火墙，为网站提供对基于Web的攻击行为（例如DoS/DDoS）的防护，更容易排查恶意软件等</p>
-<p>​    还可以为后端服务器统一提供加密和SSL加速（如SSL终端代理），提供HTTP访问认证等</p>
-</li>
+<h3 id="异步IO模型"><a href="#异步IO模型" class="headerlink" title="异步IO模型"></a>异步IO模型</h3><p>​    用户进程发起<code>aio_read</code>操作之后，给内核传递描述符、缓冲区指针、缓冲区大小等，告诉内核当整个操作完成时，如何通知进程，然后就立刻去做其他事情了。当内核收到<code>aio_read</code>后，会立刻返回，然后内核开始等待数据准备，数据准备好以后，<strong>直接把数据拷贝到用户空间</strong>，然后再通知进程本次IO已经完成</p>
+<p>​    相比于IO多路复用，异步IO并不常用，更多的服务程序会使用IO多路复用模型 + 多线程任务处理的架构来满足业务需求</p>
+<p><strong>异步IO与信号驱动最主要的区别是</strong></p>
+<ol>
+<li>信号驱动IO是由内核通知用户进程何时进行IO操作，而异步IO是内核把数据拷贝到用户空间后才通知用户进程IO操作何时完成</li>
+<li>信号驱动还需要用户进程阻塞在从内核空间缓冲区拷贝数据到用户空间，而异步IO是内核直接把所有数据准备好并且拷贝到用户空间后才通知用户进程可以进行后续的操作；<font color="red"><strong>即数据准备阶段两者都是非阻塞的，而数据拷贝阶段，信号驱动是阻塞的而异步IO是非阻塞的</strong></font></li>
 </ol>
-<h3 id="正向代理和反向代理的区别"><a href="#正向代理和反向代理的区别" class="headerlink" title="正向代理和反向代理的区别"></a>正向代理和反向代理的区别</h3><ol>
-<li><p><strong>正向代理其实是客户端的代理</strong>，帮助客户端访问其无法访问的服务器资源</p>
-<p><strong>反向代理则是服务器的代理</strong>，帮助服务器做负载均衡，安全防护等</p>
-</li>
-</ol>
-<ol start="2">
-<li><p><strong>正向代理一般是客户端架设的</strong>，比如在自己的机器上安装一个代理软件</p>
-<p><strong>反向代理一般是服务器架设的</strong>，比如在自己的机器集群中部署一个反向代理服务器</p>
-</li>
-</ol>
-<ol start="3">
-<li><p><strong>正向代理中，服务器不知道真正的客户端到底是谁</strong>，以为访问自己的就是真实的客户端</p>
-<p><strong>反向代理中，客户端不知道真正的服务器是谁</strong>，以为自己访问的就是真实的服务器</p>
-</li>
-</ol>
-<ol start="4">
-<li><p><strong>正向代理主要是用来解决访问限制问题</strong></p>
-<p><strong>反向代理则是提供负载均衡、安全防护等作用</strong></p>
-</li>
-</ol>
-<p>图片来源：<a href="https://www.zhihu.com/question/24723688" target="_blank" rel="noopener">https://www.zhihu.com/question/24723688</a></p>
-<p><img src="/2019/05/06/正向代理和反向代理/./正向代理和反向代理/代理.png" alt="代理"></p>
+<p><img src="/2019/05/08/Linux操作系统的五种IO模型/./Linux操作系统的五种IO模型/异步IO模型.jpg" alt="异步IO模型"></p>
 
       
     </div>
@@ -426,9 +442,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/正向代理/" rel="tag"><i class="fa fa-tag"></i> 正向代理</a>
-          
-            <a href="/tags/反向代理/" rel="tag"><i class="fa fa-tag"></i> 反向代理</a>
+            <a href="/tags/IO模型/" rel="tag"><i class="fa fa-tag"></i> IO模型</a>
           
         </div>
       
@@ -441,8 +455,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/04/Zookeeper小结/" rel="next" title="zookeeper小结">
-                <i class="fa fa-chevron-left"></i> zookeeper小结
+              <a href="/2019/05/06/正向代理和反向代理/" rel="next" title="正向代理和反向代理">
+                <i class="fa fa-chevron-left"></i> 正向代理和反向代理
               </a>
             
           </div>
@@ -450,10 +464,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/08/Linux操作系统的五种IO模型/" rel="prev" title="Linux操作系统的五种IO模型">
-                Linux操作系统的五种IO模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -609,7 +619,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#正向代理"><span class="nav-number">1.</span> <span class="nav-text">正向代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#正向代理的用途"><span class="nav-number">1.1.</span> <span class="nav-text">正向代理的用途</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向代理"><span class="nav-number">2.</span> <span class="nav-text">反向代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#反向代理的用途"><span class="nav-number">2.1.</span> <span class="nav-text">反向代理的用途</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正向代理和反向代理的区别"><span class="nav-number">3.</span> <span class="nav-text">正向代理和反向代理的区别</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux系统的IO"><span class="nav-number">1.</span> <span class="nav-text">Linux系统的IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步阻塞IO模型"><span class="nav-number">2.</span> <span class="nav-text">同步阻塞IO模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步非阻塞IO模型"><span class="nav-number">3.</span> <span class="nav-text">同步非阻塞IO模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号驱动IO模型"><span class="nav-number">4.</span> <span class="nav-text">信号驱动IO模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO多路复用模型"><span class="nav-number">5.</span> <span class="nav-text">IO多路复用模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#select、poll、epoll"><span class="nav-number">5.1.</span> <span class="nav-text">select、poll、epoll</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步IO模型"><span class="nav-number">6.</span> <span class="nav-text">异步IO模型</span></a></li></ol></div>
             
 
           </div>
