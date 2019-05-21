@@ -262,6 +262,194 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/21/跨域请求/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/21/跨域请求/" itemprop="url">跨域请求</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T21:33:24+08:00">
+                2019-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="跨域请求"><a href="#跨域请求" class="headerlink" title="跨域请求"></a>跨域请求</h3><p>​    <strong>跨域请求</strong>就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为如果协议 + 域名 + 端口号均相同，那么就是同域，否则则是跨域的</p>
+<p>​    跨域请求是由于浏览器的<font color="red"><strong>同源策略</strong></font>导致的，浏览器的同源策略是不能没有的（同源策略是浏览器最核心最基础的安全策略）</p>
+<ol>
+<li><strong>同源策略禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不展示），同时 Ajax 请求不能携带与本网站不同源的 Cookie</strong>；如果没有同源策略别的域名就可以拿到你浏览器上其他的Cookie信息，这样会导致很多重要的信息泄露，例如不法的网站可能会利用你的cookie去登录一些网站，盗用你的信息等。</li>
+<li>DOM 层面的同源策略限制了来自不同源的<code>Document</code>对象或 JS 脚本，对当前<code>document</code>对象的读取或设置某些属性；没有同源策略，一些脚本就能获取到你的用户密码输入框的内容信息</li>
+</ol>
+<h3 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h3><p>​    JSONP 是一种非官方的跨域数据交互协议；JSONP 本质上是利用 <script><img><iframe> 等标签不受同源策略限制，可以从不同域加载并执行资源的特性，来实现数据跨域传输</p>
+<p>​    <strong>JSONP 的理念就是</strong>：与服务端约定好一个回调函数名，服务端接收到请求后，将返回一段<code>Javascript</code>，在这段  <code>Javascript</code> 代码中调用了约定好的回调函数，并且将数据作为参数进行传递。当网页接收到这段 <code>Javascript</code> 代码后，就会执行这个回调函数，这时数据已经成功传输到客户端了</p>
+<p>​    JSONP<strong><font color=red>只支持 get请求，只支持 get请求，只支持 get请求</font></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 如果使用了springmvc 3.2以上的版本 和5.0以下的版本可以配置一个jsonp 的 Advice 就可以了</span></span><br><span class="line"><span class="comment">  *   spring会自动做相应的处理</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  *  注意：springboot2.0以上舍弃了AbstractJsonpResponseBodyAdvice</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonPAdvice</span> <span class="keyword">extends</span> <span class="title">AbstractJsonpResponseBodyAdvice</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JsonPAdvice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 这样如果请求中带 callback 参数，Spring 就知道这个是 jsonp 的请求了</span></span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"callback"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * JsonP 只支持get方法</span></span><br><span class="line"><span class="comment">  * 需要配置dataType为 jsonp</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getJsonP</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type:<span class="string">"get"</span>,</span><br><span class="line">        url:<span class="string">"http://localhost:8088/getJsonP/value.do"</span>,</span><br><span class="line">        dataType:<span class="string">"jsonp"</span>,</span><br><span class="line">        success:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(data.userName);</span><br><span class="line">        &#125;,</span><br><span class="line">        error:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(<span class="string">"错误了"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h3><p>​    跨源资源共享 Cross-Origin Resource Sharing(CORS) 是一个新的 W3C 标准，它新增的一组HTTP首部字段，允许服务端其声明哪些源站有权限访问哪些资源。换言之，它允许浏览器向声明了 CORS 的跨域服务器，发出 XMLHttpReuest 请求，从而克服 Ajax 只能同源使用的限制</p>
+<h4 id="CORS新增的HTTP头信息"><a href="#CORS新增的HTTP头信息" class="headerlink" title="CORS新增的HTTP头信息"></a>CORS新增的HTTP头信息</h4><ol>
+<li><p>Access-Control-Allow-Origin  <origin> | *</p>
+<blockquote>
+<p>​    响应首部中可以携带这个头部表示服务器允许哪些域可以访问该资源</p>
+<p>​    origin 参数的值指定了允许访问该资源的外域 URI。对于不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Methods  <method>[…, <method>] | *</p>
+<blockquote>
+<p>该首部字段用于预检请求的响应，指明实际请求所允许使用的HTTP方法</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Headers  <field-name>[…, <field-name>] | *</p>
+<blockquote>
+<p>该首部字段用于预检请求的响应。指明了实际请求中允许携带的首部字段</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Credentials  true | false</p>
+<blockquote>
+<p>表示是否允许发送Cookie</p>
+<p>​    <strong>注意：</strong>如果需要在 Ajax 中设置和获取 Cookie，那么<code>Access-Control-Allow-Origin</code>首部字段不能设置为<code>*</code> ，必须设置为具体的 origin 源站</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="Configuration配置方式"><a href="#Configuration配置方式" class="headerlink" title="Configuration配置方式"></a>Configuration配置方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 如果使用了springmvc4.2以上的版本，直接使用mvc相关配置即可</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * springboot 2.0 以上的版本中 WebMvcConfigurerAdapter 已经过时了</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  可以实现 WebMvcConfigurer 来达到相同的目的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//addMapping是指定支持跨域的路径     </span></span><br><span class="line">      	registry.addMapping(<span class="string">"/**"</span>)</span><br><span class="line">              <span class="comment">//如果前端不带cookie过来或者不限制域访问的话，那么设置 .allowedOrigins("*") 即可</span></span><br><span class="line">              <span class="comment">//.allowedOrigins("*")</span></span><br><span class="line">              .allowedOrigins(<span class="string">"http://localhost:8001"</span>, <span class="string">"http://localhost:8002"</span>)</span><br><span class="line">              .allowedMethods(<span class="string">"GET"</span>, <span class="string">"POST"</span>, <span class="string">"PUT"</span>, <span class="string">"DELETE"</span>)</span><br><span class="line">              .allowCredentials(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * crossDomain: true，这里代表使用跨域请求</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  xhrFields: &#123;withCredentials: true&#125;</span></span><br><span class="line"><span class="comment"> *      这样配置就可以把 cookie 带过去了,不然我们连 session 都没法维护</span></span><br><span class="line"><span class="comment"> *      当然,如果你没有这个需求,也就不需要配置这个了</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *    注意：如果配置了true 需要带cookie信息过去的话,后端的Access-Control-Allow-Origin不能配置成 *</span></span><br><span class="line"><span class="comment"> *           需要配置为具体的 origin 源站</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCors</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type:<span class="string">"POST"</span>,</span><br><span class="line">        url:<span class="string">"http://localhost:8088/getCors/value.do"</span>,</span><br><span class="line">        dataType:<span class="string">"json"</span>,</span><br><span class="line">        crossDomain: <span class="literal">true</span>,</span><br><span class="line">        xhrFields: &#123;</span><br><span class="line">            withCredentials: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        success:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(data.userName);</span><br><span class="line">        &#125;,</span><br><span class="line">        error:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(<span class="string">"错误了"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="CrossOrigin注解方式"><a href="#CrossOrigin注解方式" class="headerlink" title="CrossOrigin注解方式"></a>CrossOrigin注解方式</h4><p>​    <strong>除了Configuration的配置方式外，springMVC4.2之后的版本都支持注解的方式</strong>，可以使用<code>@CrossOrigin</code> 注解来实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> CrossOrigin &#123;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Origin 是 '*'</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    String[] DEFAULT_ORIGINS = <span class="keyword">new</span> String[]&#123;<span class="string">"*"</span>&#125;;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Headers 是 ‘*’</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    String[] DEFAULT_ALLOWED_HEADERS = <span class="keyword">new</span> String[]&#123;<span class="string">"*"</span>&#125;;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Credentials 是false;即不允许发送cookie</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">boolean</span> DEFAULT_ALLOW_CREDENTIALS = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">//默认在1800秒内，不需要发出第二次预检请求</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">long</span> DEFAULT_MAX_AGE = <span class="number">1800L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"origins"</span>)</span><br><span class="line">    String[] value() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"value"</span>)</span><br><span class="line">    String[] origins() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] allowedHeaders() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] exposedHeaders() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    RequestMethod[] methods() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">allowCredentials</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">maxAge</span><span class="params">()</span> <span class="keyword">default</span> -1L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * CrossOrigin 注解可以作用在整个Controller上或者作用在方法上</span></span><br><span class="line"><span class="comment"> *      作用在类上是：表示支持拦截整个controller的接口</span></span><br><span class="line"><span class="comment"> *      作用在方法上是：表示支持拦截指定的接口</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      配置中value和origins等价,均为配置Access-Control-Allow-Origin</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@CrossOrigin</span>(origins = &#123;<span class="string">"http://localhost:8001"</span>, <span class="string">"http://localhost:8002"</span>&#125;,</span><br><span class="line">            methods = &#123;RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE&#125;,</span><br><span class="line">            allowCredentials = <span class="string">"true"</span>)</span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getCors"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/value.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsUser <span class="title">getCors</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsUser(<span class="string">"我是Cors"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="HttpServletResponse方式"><a href="#HttpServletResponse方式" class="headerlink" title="HttpServletResponse方式"></a>HttpServletResponse方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getCors"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/value.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsUser <span class="title">getCors</span><span class="params">(HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">        response.addHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"*"</span>);</span><br><span class="line">        response.setHeader(<span class="string">"Access-Control-Allow-Credentials"</span>, <span class="string">"true"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsUser(<span class="string">"我是Cors"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JsonP和CORS的比较"><a href="#JsonP和CORS的比较" class="headerlink" title="JsonP和CORS的比较"></a>JsonP和CORS的比较</h3><ol>
+<li><code>JSONP</code> 只能实现 GET 请求，而 <code>CORS</code> 支持所有类型的 HTTP 请求</li>
+<li>使用 CORS 可以使用普通的 XMLHttpRequest 发起请求和获取数据，比 JSONP 有更好的错误处理</li>
+<li>CORS 的兼容性比不上 JSONP，一些比较老的浏览器只支持 JSONP</li>
+</ol>
+</script></p>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/13/分布式锁及其实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2904,126 +3092,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/Adrian_Github_io/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Adrian Dai">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/rifumei.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adrian">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/08/Adrian_Github_io/" itemprop="url">welcome baby!</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-08T11:00:20+08:00">
-                2019-01-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NettyTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">server</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Netty内部都是通过线程在处理各种数据</span></span><br><span class="line"><span class="comment">         * EventLoopGroup就是用来管理调度他们的，注册Channel，管理他们的生命周期。</span></span><br><span class="line"><span class="comment">         * NioEventLoopGroup 是用来处理I/O操作的多线程事件循环器，</span></span><br><span class="line"><span class="comment">         * Netty提供了许多不同的EventLoopGroup的实现用来处理不同传输协议。</span></span><br><span class="line"><span class="comment">         * 有2个NioEventLoopGroup会被使用。</span></span><br><span class="line"><span class="comment">         * 第一个经常被叫做‘boss’，用来接收进来的连接。</span></span><br><span class="line"><span class="comment">         * 第二个经常被叫做‘worker’，用来处理已经被接收的连接，</span></span><br><span class="line"><span class="comment">         * 一旦‘boss’接收到连接，就会把连接信息注册到‘worker’上。</span></span><br><span class="line"><span class="comment">         * 如何知道多少个线程已经被使用，如何映射到已经创建的Channels上都需要依赖于EventLoopGroup的实现，</span></span><br><span class="line"><span class="comment">         * 并且可以通过构造函数来配置他们的关系。</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="comment">//因为bossGroup仅接收客户端连接，不做复杂的逻辑处理，为了尽可能减少资源的占用，取值越小越好</span></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 与 bossGroup 相关联的 EventLoopGroup 将分配一个负责为传入连接请求创建Channel 的 EventLoop。</span></span><br><span class="line"><span class="comment">         * 一旦连接被接受，workerGroup 就会给它的 Channel 分配一个 EventLoop</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        NioEventLoopGroup bossGroup = <span class="keyword">new</span> NioEventLoopGroup(<span class="number">1</span>);</span><br><span class="line">        NioEventLoopGroup workerGroup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * ServerBootstrap 是一个启动NIO服务的辅助启动类</span></span><br><span class="line"><span class="comment">             * 你可以在这个服务中直接使用Channel</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            ServerBootstrap serverBootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">            serverBootstrap.group(bossGroup, workerGroup)</span><br><span class="line">                    <span class="comment">/*</span></span><br><span class="line"><span class="comment">                     * ServerSocketChannel以NIO的selector为基础进行实现的</span></span><br><span class="line"><span class="comment">                     * 指定使用NioServerSocketChannel产生一个Channel用来接收连接</span></span><br><span class="line"><span class="comment">                     */</span></span><br><span class="line">                    .channel(NioServerSocketChannel.class)</span><br><span class="line">                    .option(ChannelOption.SO_BACKLOG, <span class="number">100</span>) <span class="comment">// 连接数</span></span><br><span class="line">                     <span class="comment">/*</span></span><br><span class="line"><span class="comment">                      * option()是提供给NioServerSocketChannel用来接收进来的连接。</span></span><br><span class="line"><span class="comment">                      * childOption()是提供给由父管道ServerChannel接收到的连接</span></span><br><span class="line"><span class="comment">                      */</span></span><br><span class="line">                    .option(ChannelOption.TCP_NODELAY, <span class="keyword">true</span>) <span class="comment">// 不延迟，消息立即发送</span></span><br><span class="line">                    <span class="comment">/*</span></span><br><span class="line"><span class="comment">                     * 是否启用心跳保活机制。在双方TCP套接字建立连接后（即都进入ESTABLISHED状态）</span></span><br><span class="line"><span class="comment">                     * 并且在两个小时左右上层没有任何数据传输的情况下，这套机制才会被激活</span></span><br><span class="line"><span class="comment">                     */</span></span><br><span class="line">                    .childOption(ChannelOption.SO_KEEPALIVE, <span class="keyword">true</span>) <span class="comment">// 长连接</span></span><br><span class="line">                    .handler(<span class="keyword">new</span> LoggingHandler(LogLevel.INFO))</span><br><span class="line">                     <span class="comment">/*</span></span><br><span class="line"><span class="comment">                      * 这里的事件处理类经常会被用来处理一个最近的已经接收的Channel。</span></span><br><span class="line"><span class="comment">                      * ChannelInitializer是一个特殊的处理类，</span></span><br><span class="line"><span class="comment">                      * 他的目的是帮助使用者配置一个新的Channel。</span></span><br><span class="line"><span class="comment">                      * 也许你想通过增加一些处理类比如NettyServerHandler来配置一个新的Channel</span></span><br><span class="line"><span class="comment">                      * 或者其对应的ChannelPipeline来实现你的网络程序。</span></span><br><span class="line"><span class="comment">                      * 当你的程序变的复杂时，可能你会增加更多的处理类到pipline上，</span></span><br><span class="line"><span class="comment">                      * 然后提取这些匿名类到最顶层的类上。</span></span><br><span class="line"><span class="comment">                      */</span></span><br><span class="line">                    .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel socketChannel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                            ChannelPipeline pipeline = socketChannel.pipeline();</span><br><span class="line">                            <span class="comment">// 添加NettyServerHandler，用来处理Server端接收和处理消息的逻辑</span></span><br><span class="line">                            <span class="comment">// ChannelPipeline用于存放管理ChannelHandel</span></span><br><span class="line">                            <span class="comment">// ChannelHandler用于处理请求响应的业务逻辑相关代码</span></span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> NettyServerHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * 绑定端口并启动去接收进来的连接</span></span><br><span class="line"><span class="comment">             * 对 sync()方法的调用将导致当前 Thread 阻塞，一直到绑定操作完成为止</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            ChannelFuture sync = serverBootstrap.bind(<span class="number">8081</span>).sync();</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * 这里会一直等待，直到socket被关闭或者被唤醒</span></span><br><span class="line"><span class="comment">             *</span></span><br><span class="line"><span class="comment">             * sync()会同步等待连接操作结果</span></span><br><span class="line"><span class="comment">             * 用户线程将在此wait()，直到连接操作完成之后，线程被notify(),用户代码继续执行</span></span><br><span class="line"><span class="comment">             * closeFuture()当Channel关闭时返回一个ChannelFuture,用于链路检测</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            sync.channel().closeFuture().sync();</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workerGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">client</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 如果你只指定了一个EventLoopGroup，</span></span><br><span class="line"><span class="comment">         * 那他就会即作为一个‘boss’线程，</span></span><br><span class="line"><span class="comment">         * 也会作为一个‘workder’线程，</span></span><br><span class="line"><span class="comment">         * 尽管客户端不需要使用到‘boss’线程。</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        NioEventLoopGroup group = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Bootstrap bootstrap = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">            bootstrap.group(group)</span><br><span class="line">                    .channel(NioSocketChannel.class)</span><br><span class="line">                    <span class="comment">/**</span></span><br><span class="line"><span class="comment">                     * 不像在使用ServerBootstrap时需要用childOption()方法，</span></span><br><span class="line"><span class="comment">                     * 因为客户端的SocketChannel没有父channel的概念。</span></span><br><span class="line"><span class="comment">                     */</span></span><br><span class="line">                    .option(ChannelOption.TCP_NODELAY, <span class="keyword">true</span>) <span class="comment">// 不延迟，消息立即发送</span></span><br><span class="line">                    .handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel socketChannel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                            ChannelPipeline pipeline = socketChannel.pipeline();</span><br><span class="line">                            pipeline.addLast(<span class="keyword">new</span> NettyClientHandler());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">            ChannelFuture sync = bootstrap.connect(InetAddress.getLocalHost(),<span class="number">8081</span>).sync();</span><br><span class="line">            <span class="keyword">if</span> (sync.isSuccess()) &#123;</span><br><span class="line">                System.err.println(<span class="string">"连接服务器成功"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            sync.channel().closeFuture().sync();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            group.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3094,7 +3162,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

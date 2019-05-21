@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jsonp,cors,跨域,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="跨域请求​    跨域请求就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为如果协议 + 域名 + 端口号均相同，那么就是同域，否则则是跨域的 ​    跨域请求是由于浏览器的同源策略导致的，浏览器的同源策略是不能没有的（同源策略是浏览器最核心最基础的安全策略）  同源策略禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不">
+<meta name="keywords" content="jsonp,cors,跨域">
+<meta property="og:type" content="article">
+<meta property="og:title" content="跨域请求">
+<meta property="og:url" content="http://yoursite.com/2019/05/21/跨域请求/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="跨域请求​    跨域请求就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为如果协议 + 域名 + 端口号均相同，那么就是同域，否则则是跨域的 ​    跨域请求是由于浏览器的同源策略导致的，浏览器的同源策略是不能没有的（同源策略是浏览器最核心最基础的安全策略）  同源策略禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-21T13:34:27.954Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="跨域请求">
+<meta name="twitter:description" content="跨域请求​    跨域请求就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为如果协议 + 域名 + 端口号均相同，那么就是同域，否则则是跨域的 ​    跨域请求是由于浏览器的同源策略导致的，浏览器的同源策略是不能没有的（同源策略是浏览器最核心最基础的安全策略）  同源策略禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/21/跨域请求/">
+
+
+
+
+
+  <title>跨域请求 | Adrian</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	<a href="https://github.com/daiadrian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Adrian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/21/跨域请求/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">跨域请求</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-21T21:33:24+08:00">
+                2019-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="跨域请求"><a href="#跨域请求" class="headerlink" title="跨域请求"></a>跨域请求</h3><p>​    <strong>跨域请求</strong>就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为如果协议 + 域名 + 端口号均相同，那么就是同域，否则则是跨域的</p>
+<p>​    跨域请求是由于浏览器的<font color="red"><strong>同源策略</strong></font>导致的，浏览器的同源策略是不能没有的（同源策略是浏览器最核心最基础的安全策略）</p>
+<ol>
+<li><strong>同源策略禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不展示），同时 Ajax 请求不能携带与本网站不同源的 Cookie</strong>；如果没有同源策略别的域名就可以拿到你浏览器上其他的Cookie信息，这样会导致很多重要的信息泄露，例如不法的网站可能会利用你的cookie去登录一些网站，盗用你的信息等。</li>
+<li>DOM 层面的同源策略限制了来自不同源的<code>Document</code>对象或 JS 脚本，对当前<code>document</code>对象的读取或设置某些属性；没有同源策略，一些脚本就能获取到你的用户密码输入框的内容信息</li>
+</ol>
+<h3 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h3><p>​    JSONP 是一种非官方的跨域数据交互协议；JSONP 本质上是利用 <script><img><iframe> 等标签不受同源策略限制，可以从不同域加载并执行资源的特性，来实现数据跨域传输</p>
+<p>​    <strong>JSONP 的理念就是</strong>：与服务端约定好一个回调函数名，服务端接收到请求后，将返回一段<code>Javascript</code>，在这段  <code>Javascript</code> 代码中调用了约定好的回调函数，并且将数据作为参数进行传递。当网页接收到这段 <code>Javascript</code> 代码后，就会执行这个回调函数，这时数据已经成功传输到客户端了</p>
+<p>​    JSONP<strong><font color=red>只支持 get请求，只支持 get请求，只支持 get请求</font></strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 如果使用了springmvc 3.2以上的版本 和5.0以下的版本可以配置一个jsonp 的 Advice 就可以了</span></span><br><span class="line"><span class="comment">  *   spring会自动做相应的处理</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  *  注意：springboot2.0以上舍弃了AbstractJsonpResponseBodyAdvice</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="meta">@ControllerAdvice</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsonPAdvice</span> <span class="keyword">extends</span> <span class="title">AbstractJsonpResponseBodyAdvice</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JsonPAdvice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 这样如果请求中带 callback 参数，Spring 就知道这个是 jsonp 的请求了</span></span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"callback"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * JsonP 只支持get方法</span></span><br><span class="line"><span class="comment">  * 需要配置dataType为 jsonp</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getJsonP</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type:<span class="string">"get"</span>,</span><br><span class="line">        url:<span class="string">"http://localhost:8088/getJsonP/value.do"</span>,</span><br><span class="line">        dataType:<span class="string">"jsonp"</span>,</span><br><span class="line">        success:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(data.userName);</span><br><span class="line">        &#125;,</span><br><span class="line">        error:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(<span class="string">"错误了"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h3><p>​    跨源资源共享 Cross-Origin Resource Sharing(CORS) 是一个新的 W3C 标准，它新增的一组HTTP首部字段，允许服务端其声明哪些源站有权限访问哪些资源。换言之，它允许浏览器向声明了 CORS 的跨域服务器，发出 XMLHttpReuest 请求，从而克服 Ajax 只能同源使用的限制</p>
+<h4 id="CORS新增的HTTP头信息"><a href="#CORS新增的HTTP头信息" class="headerlink" title="CORS新增的HTTP头信息"></a>CORS新增的HTTP头信息</h4><ol>
+<li><p>Access-Control-Allow-Origin  <origin> | *</p>
+<blockquote>
+<p>​    响应首部中可以携带这个头部表示服务器允许哪些域可以访问该资源</p>
+<p>​    origin 参数的值指定了允许访问该资源的外域 URI。对于不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Methods  <method>[…, <method>] | *</p>
+<blockquote>
+<p>该首部字段用于预检请求的响应，指明实际请求所允许使用的HTTP方法</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Headers  <field-name>[…, <field-name>] | *</p>
+<blockquote>
+<p>该首部字段用于预检请求的响应。指明了实际请求中允许携带的首部字段</p>
+</blockquote>
+</li>
+<li><p>Access-Control-Allow-Credentials  true | false</p>
+<blockquote>
+<p>表示是否允许发送Cookie</p>
+<p>​    <strong>注意：</strong>如果需要在 Ajax 中设置和获取 Cookie，那么<code>Access-Control-Allow-Origin</code>首部字段不能设置为<code>*</code> ，必须设置为具体的 origin 源站</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="Configuration配置方式"><a href="#Configuration配置方式" class="headerlink" title="Configuration配置方式"></a>Configuration配置方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 如果使用了springmvc4.2以上的版本，直接使用mvc相关配置即可</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * springboot 2.0 以上的版本中 WebMvcConfigurerAdapter 已经过时了</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  可以实现 WebMvcConfigurer 来达到相同的目的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCorsMappings</span><span class="params">(CorsRegistry registry)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//addMapping是指定支持跨域的路径     </span></span><br><span class="line">      	registry.addMapping(<span class="string">"/**"</span>)</span><br><span class="line">              <span class="comment">//如果前端不带cookie过来或者不限制域访问的话，那么设置 .allowedOrigins("*") 即可</span></span><br><span class="line">              <span class="comment">//.allowedOrigins("*")</span></span><br><span class="line">              .allowedOrigins(<span class="string">"http://localhost:8001"</span>, <span class="string">"http://localhost:8002"</span>)</span><br><span class="line">              .allowedMethods(<span class="string">"GET"</span>, <span class="string">"POST"</span>, <span class="string">"PUT"</span>, <span class="string">"DELETE"</span>)</span><br><span class="line">              .allowCredentials(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * crossDomain: true，这里代表使用跨域请求</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  xhrFields: &#123;withCredentials: true&#125;</span></span><br><span class="line"><span class="comment"> *      这样配置就可以把 cookie 带过去了,不然我们连 session 都没法维护</span></span><br><span class="line"><span class="comment"> *      当然,如果你没有这个需求,也就不需要配置这个了</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *    注意：如果配置了true 需要带cookie信息过去的话,后端的Access-Control-Allow-Origin不能配置成 *</span></span><br><span class="line"><span class="comment"> *           需要配置为具体的 origin 源站</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCors</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type:<span class="string">"POST"</span>,</span><br><span class="line">        url:<span class="string">"http://localhost:8088/getCors/value.do"</span>,</span><br><span class="line">        dataType:<span class="string">"json"</span>,</span><br><span class="line">        crossDomain: <span class="literal">true</span>,</span><br><span class="line">        xhrFields: &#123;</span><br><span class="line">            withCredentials: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        success:<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(data.userName);</span><br><span class="line">        &#125;,</span><br><span class="line">        error:<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            $(<span class="string">"#userName"</span>).val(<span class="string">"错误了"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="CrossOrigin注解方式"><a href="#CrossOrigin注解方式" class="headerlink" title="CrossOrigin注解方式"></a>CrossOrigin注解方式</h4><p>​    <strong>除了Configuration的配置方式外，springMVC4.2之后的版本都支持注解的方式</strong>，可以使用<code>@CrossOrigin</code> 注解来实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> CrossOrigin &#123;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Origin 是 '*'</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    String[] DEFAULT_ORIGINS = <span class="keyword">new</span> String[]&#123;<span class="string">"*"</span>&#125;;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Headers 是 ‘*’</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    String[] DEFAULT_ALLOWED_HEADERS = <span class="keyword">new</span> String[]&#123;<span class="string">"*"</span>&#125;;</span><br><span class="line">    <span class="comment">//默认的Access-Control-Allow-Credentials 是false;即不允许发送cookie</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">boolean</span> DEFAULT_ALLOW_CREDENTIALS = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">//默认在1800秒内，不需要发出第二次预检请求</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="keyword">long</span> DEFAULT_MAX_AGE = <span class="number">1800L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"origins"</span>)</span><br><span class="line">    String[] value() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AliasFor</span>(<span class="string">"value"</span>)</span><br><span class="line">    String[] origins() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] allowedHeaders() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    String[] exposedHeaders() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    RequestMethod[] methods() <span class="keyword">default</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">allowCredentials</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">maxAge</span><span class="params">()</span> <span class="keyword">default</span> -1L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * CrossOrigin 注解可以作用在整个Controller上或者作用在方法上</span></span><br><span class="line"><span class="comment"> *      作用在类上是：表示支持拦截整个controller的接口</span></span><br><span class="line"><span class="comment"> *      作用在方法上是：表示支持拦截指定的接口</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *      配置中value和origins等价,均为配置Access-Control-Allow-Origin</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@CrossOrigin</span>(origins = &#123;<span class="string">"http://localhost:8001"</span>, <span class="string">"http://localhost:8002"</span>&#125;,</span><br><span class="line">            methods = &#123;RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE&#125;,</span><br><span class="line">            allowCredentials = <span class="string">"true"</span>)</span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getCors"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/value.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsUser <span class="title">getCors</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsUser(<span class="string">"我是Cors"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="HttpServletResponse方式"><a href="#HttpServletResponse方式" class="headerlink" title="HttpServletResponse方式"></a>HttpServletResponse方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/getCors"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CorsController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/value.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CorsUser <span class="title">getCors</span><span class="params">(HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">        response.addHeader(<span class="string">"Access-Control-Allow-Origin"</span>, <span class="string">"*"</span>);</span><br><span class="line">        response.setHeader(<span class="string">"Access-Control-Allow-Credentials"</span>, <span class="string">"true"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CorsUser(<span class="string">"我是Cors"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JsonP和CORS的比较"><a href="#JsonP和CORS的比较" class="headerlink" title="JsonP和CORS的比较"></a>JsonP和CORS的比较</h3><ol>
+<li><code>JSONP</code> 只能实现 GET 请求，而 <code>CORS</code> 支持所有类型的 HTTP 请求</li>
+<li>使用 CORS 可以使用普通的 XMLHttpRequest 发起请求和获取数据，比 JSONP 有更好的错误处理</li>
+<li>CORS 的兼容性比不上 JSONP，一些比较老的浏览器只支持 JSONP</li>
+</ol>
+</script></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jsonp/" rel="tag"><i class="fa fa-tag"></i> jsonp</a>
+          
+            <a href="/tags/cors/" rel="tag"><i class="fa fa-tag"></i> cors</a>
+          
+            <a href="/tags/跨域/" rel="tag"><i class="fa fa-tag"></i> 跨域</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/13/分布式锁及其实现/" rel="next" title="分布式锁及其实现">
+                <i class="fa fa-chevron-left"></i> 分布式锁及其实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/rifumei.jpg" alt="Adrian Dai">
+            
+              <p class="site-author-name" itemprop="name">Adrian Dai</p>
+              <p class="site-description motion-element" itemprop="description">看板娘赛高！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daiadrian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:daiadrian@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/Adrian_Dai" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#跨域请求"><span class="nav-number">1.</span> <span class="nav-text">跨域请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSONP"><span class="nav-number">2.</span> <span class="nav-text">JSONP</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adrian Dai</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"vOffset":-100,"hOffset":0},"mobile":{"show":true,"motion":true},"react":{"opacityDefault":0.9,"opacityOnHover":0.5},"log":false});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
