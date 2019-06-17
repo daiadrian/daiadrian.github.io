@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="看板娘赛高！">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Adrian">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="Adrian">
+<meta property="og:description" content="看板娘赛高！">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adrian">
+<meta name="twitter:description" content="看板娘赛高！">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/page/2/">
+
+
+
+
+
+  <title>Adrian</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
+    <div class="headband"></div>
+	<a href="https://github.com/daiadrian" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#fff; color:#151513; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Adrian</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/14/秒杀总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/14/秒杀总结/" itemprop="url">商品秒杀系统技术总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-14T11:00:20+08:00">
+                2019-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/商品秒杀/" itemprop="url" rel="index">
+                    <span itemprop="name">商品秒杀</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>这篇总结基于M课网的秒杀API的课程基础上来写的</p>
+<p>这个课程我个人觉得有很多值得学习的地方，包括接口实现的思路，编码规范等等。</p>
+</blockquote>
+<h1 id="登录模块"><a href="#登录模块" class="headerlink" title="登录模块"></a>登录模块</h1><p>​    在登录这块，注册实现比较简单；主要是对password经过两层的盐值加密，前端加密然后后端也对其进行一次加密后再存放到数据库中。</p>
+<h2 id="登录验证"><a href="#登录验证" class="headerlink" title="登录验证"></a>登录验证</h2><p>​    这里主要对登录的验证沿用了拦截器来实现，主要的实现流程如下：</p>
+<ol>
+<li><p>用户登录验证通过后（用户名和密码验证通过），生成随机码，对随机码进行加密操作</p>
+</li>
+<li><p>将加密后的随机码作为key，value存放user的json串存放到redis中（当然，可以不必要存放所有的字段，存放一些后续操作所需要的字段即可，这边我直接将user存放到redis中），并对其设置过期时间</p>
+</li>
+<li><p>放入redis后将生成的加密随机码放入cookie中，下次用户请求过来会带上cookie过来进行身份验证</p>
+</li>
+<li><p>我这边身份验证放到的拦截器中，就是简单的根据cookie的value来获取redis中的缓存，能够获取到user的即为验证通过</p>
+<blockquote>
+<p>这里有个小注意：</p>
+<blockquote>
+<p>Spring Boot 2.0后用配置类继承WebMvcConfigurerAdapter时，会提示这个类已经过时了</p>
+<blockquote>
+<p>此时可以通过实现WebMvcConfigurer接口解决该问题</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="JSR-303数据效验"><a href="#JSR-303数据效验" class="headerlink" title="JSR-303数据效验"></a>JSR-303数据效验</h2><p>（详细介绍：<a href="https://www.ibm.com/developerworks/cn/java/j-lo-jsr303/）" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/java/j-lo-jsr303/）</a></p>
+<ul>
+<li>使用JSR-303可以实现自定义的数据校验，这里我使用这个规范来对手机号码参数进行校验（推荐前后端一起校验）</li>
+<li>实现流程参考：<a href="https://blog.csdn.net/Adrian_Dai/article/details/83304599" target="_blank" rel="noopener">https://blog.csdn.net/Adrian_Dai/article/details/83304599</a></li>
+</ul>
+<h2 id="自定义参数解析器"><a href="#自定义参数解析器" class="headerlink" title="自定义参数解析器"></a>自定义参数解析器</h2><p>获取User对象可以实现了自定义参数解析器来为方法上的User参数进行解析，从cookie中获取到随机码，然后从redis中获取到User对象装填到方法的参数上。</p>
+<ul>
+<li><p>Springmvc的自定义参数解析器是当接口参数中有某个类的时候触发，此时可以从该参数解析器中返回我们所需要的内容</p>
+</li>
+<li><p>这里以User参数为例，自定义参数解析器实现<code>HandlerMethodArgumentResolver</code>接口，该接口下有两个方法</p>
+<ul>
+<li>supportsParameter：当进入方法的参数解析时会调用这个方法，当这个方法返回true 的时候会执行resolveArgument方法对参数进行解析</li>
+</ul>
+</li>
+<li><p>注意，要记得将其加入到<code>List<handlermethodargumentresolver></handlermethodargumentresolver></code>中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	UserArgumentResolver userArgumentResolver;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addArgumentResolvers</span><span class="params">(List&lt;HandlerMethodArgumentResolver&gt; argumentResolvers)</span> </span>&#123;</span><br><span class="line">		argumentResolvers.add(userArgumentResolver);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="商品和订单模块"><a href="#商品和订单模块" class="headerlink" title="商品和订单模块"></a>商品和订单模块</h1><p>​    这里主要提及一下页面缓存、url缓存和对象缓存，如字面意思。来看下面的这段代码(<strong>注意阅读注释</strong>)：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * thymeleaf的页面渲染</span></span><br><span class="line"><span class="comment"> * 注意点：因为在thymeleaf.spring5的API中把大部分的功能移到了IWebContext下面,用来区分边界。</span></span><br><span class="line"><span class="comment"> * 		  剔除了ApplicationContext 过多的依赖，现在thymeleaf渲染不再过多依赖spring容器。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 在spring4中的使用:</span></span><br><span class="line"><span class="comment"> * SpringWebContext ctx = new SpringWebContext(request,response,</span></span><br><span class="line"><span class="comment"> * 					request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );</span></span><br><span class="line"><span class="comment"> * String html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * RequestMapping中produces属性设置返回数据的类型以及编码;必须与<span class="doctag">@ResponseBody</span>注解使用</span></span><br><span class="line"><span class="comment"> */</span>	</span><br><span class="line">	<span class="meta">@RequestMapping</span>(value=<span class="string">"/to_list"</span>, produces=<span class="string">"text/html"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">list</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user)</span> </span>&#123;</span><br><span class="line">    	model.addAttribute(<span class="string">"user"</span>, user);</span><br><span class="line">    	<span class="comment">//取缓存</span></span><br><span class="line">    	String html = redisService.get(GoodsKey.getGoodsList, <span class="string">""</span>, String.class);</span><br><span class="line">    	<span class="keyword">if</span>(!StringUtils.isEmpty(html)) &#123;</span><br><span class="line">    		<span class="keyword">return</span> html;</span><br><span class="line">    	&#125;</span><br><span class="line">    	List&lt;GoodsVo&gt; goodsList = goodsService.listGoodsVo();</span><br><span class="line">    	model.addAttribute(<span class="string">"goodsList"</span>, goodsList);</span><br><span class="line"><span class="comment">// model 就是将参数存入 ，其中的所有参数 都是为了将页面渲染出来 放入其中，在返回一个静态的html源码</span></span><br><span class="line">    	IWebContext webContext = <span class="keyword">new</span> WebContext(request,response,</span><br><span class="line">    			request.getServletContext(),request.getLocale(), model.asMap());</span><br><span class="line">    	<span class="comment">//手动渲染</span></span><br><span class="line">    	String html = thymeleafViewResolver.getTemplateEngine().process(<span class="string">"goods_list"</span>, webContext);</span><br><span class="line">    	<span class="keyword">if</span>(!StringUtils.isEmpty(html)) &#123;</span><br><span class="line">            <span class="comment">//页面缓存</span></span><br><span class="line">    		redisService.set(GoodsKey.getGoodsList, <span class="string">""</span>, html);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> html;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/to_detail/&#123;goodsId&#125;"</span>,produces=<span class="string">"text/html"</span>)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">detail</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,</span></span></span><br><span class="line"><span class="function"><span class="params">    		@PathVariable(<span class="string">"goodsId"</span>)</span><span class="keyword">long</span> goodsId) </span>&#123;</span><br><span class="line">    	model.addAttribute(<span class="string">"user"</span>, user);</span><br><span class="line">    	</span><br><span class="line">    	<span class="comment">//取缓存</span></span><br><span class="line">    	String html = redisService.get(GoodsKey.getGoodsDetail, <span class="string">""</span>+goodsId, String.class);</span><br><span class="line">    	<span class="keyword">if</span>(!StringUtils.isEmpty(html)) &#123;</span><br><span class="line">    		<span class="keyword">return</span> html;</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="comment">//手动渲染</span></span><br><span class="line">    	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);</span><br><span class="line">    	model.addAttribute(<span class="string">"goods"</span>, goods);</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">long</span> startAt = goods.getStartDate().getTime();</span><br><span class="line">    	<span class="keyword">long</span> endAt = goods.getEndDate().getTime();</span><br><span class="line">    	<span class="keyword">long</span> now = System.currentTimeMillis();</span><br><span class="line">    	</span><br><span class="line">    	<span class="keyword">int</span> miaoshaStatus = <span class="number">0</span>;</span><br><span class="line">    	<span class="keyword">int</span> remainSeconds = <span class="number">0</span>;</span><br><span class="line">    	<span class="keyword">if</span>(now &lt; startAt ) &#123;<span class="comment">//秒杀还没开始，倒计时</span></span><br><span class="line">    		miaoshaStatus = <span class="number">0</span>;</span><br><span class="line">    		remainSeconds = (<span class="keyword">int</span>)((startAt - now )/<span class="number">1000</span>);</span><br><span class="line">    	&#125;<span class="keyword">else</span>  <span class="keyword">if</span>(now &gt; endAt)&#123;<span class="comment">//秒杀已经结束</span></span><br><span class="line">    		miaoshaStatus = <span class="number">2</span>;</span><br><span class="line">    		remainSeconds = -<span class="number">1</span>;</span><br><span class="line">    	&#125;<span class="keyword">else</span> &#123;<span class="comment">//秒杀进行中</span></span><br><span class="line">    		miaoshaStatus = <span class="number">1</span>;</span><br><span class="line">    		remainSeconds = <span class="number">0</span>;</span><br><span class="line">    	&#125;</span><br><span class="line">    	model.addAttribute(<span class="string">"miaoshaStatus"</span>, miaoshaStatus);</span><br><span class="line">    	model.addAttribute(<span class="string">"remainSeconds"</span>, remainSeconds);</span><br><span class="line">    	</span><br><span class="line">    	IWebContext webContext = <span class="keyword">new</span> WebContext(request,response,</span><br><span class="line">    			request.getServletContext(),request.getLocale(), model.asMap());</span><br><span class="line">    	html = thymeleafViewResolver.getTemplateEngine().process(<span class="string">"goods_detail"</span>, webContext);</span><br><span class="line">    	<span class="keyword">if</span>(!StringUtils.isEmpty(html)) &#123;</span><br><span class="line">            <span class="comment">//url缓存</span></span><br><span class="line">    		redisService.set(GoodsKey.getGoodsDetail, <span class="string">""</span>+goodsId, html);</span><br><span class="line">    	&#125;</span><br><span class="line">    	<span class="keyword">return</span> html;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//对象缓存即：将对象化成json存放到reids中；在更新对象缓存的时候要注意先更新db数据库的再更新缓存中的数据来保持一致性</span></span><br></pre></td></tr></table></figure>
+<p>​    这里对于页面缓存的实现，可以使用thymeleaf来实现；也可以使用对象缓存，然后用ajax获取数据并且利用vue或者angular来渲染页面，就不用将整个html页面存放到redis中去了。</p>
+<hr>
+<h1 id="秒杀模块"><a href="#秒杀模块" class="headerlink" title="秒杀模块"></a>秒杀模块</h1><p>优化商品的秒杀API的主要内容：</p>
+<p>(秒杀订单中商品ID和用户的ID做UNIQUE 约束)</p>
+<ol>
+<li><p>隐藏秒杀地址</p>
+<ul>
+<li>当你可以对商品进行秒杀的时候，先去根据用户获取秒杀的url（如秒杀url：<code><strong>/{path}/do_seckill</strong></code>），然后将这个path根据用户放入到redis中</li>
+<li>获取到路径返回后再去请求刚才获取到的url进行商品的秒杀，此时会对商品的url上的path进行验证，是相同的path才能进行秒杀操作</li>
+<li>这里需要对获取path的接口进行防刷（限流）操作</li>
+</ul>
+</li>
+<li><p>接口防刷</p>
+<ul>
+<li><p>使用<strong>自定义注解</strong>加<strong>拦截器</strong>的方式实现接口的防刷</p>
+</li>
+<li><p>自定义注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RUNTIME)</span><br><span class="line"><span class="meta">@Target</span>(METHOD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AccessLimit &#123;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">seconds</span><span class="params">()</span></span>;<span class="comment">//n秒内可以请求maxCount次这个接口</span></span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">maxCount</span><span class="params">()</span></span>;<span class="comment">//最大次数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用拦截器拦截秒杀API的请求（利用HandlerMethod <code>hm.getMethodAnnotation(AccessLimit.class)</code> 来获取自定义的AccessLimit注解）</p>
+</li>
+<li><p>当满足在n秒内请求数量在maxCount以内的即可放行当前的请求</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(handler <span class="keyword">instanceof</span> HandlerMethod) &#123;</span><br><span class="line">			HandlerMethod hm = (HandlerMethod)handler;</span><br><span class="line">            <span class="comment">//方法上无该注解则直接放行</span></span><br><span class="line">			AccessLimit accessLimit = hm.getMethodAnnotation(AccessLimit.class);</span><br><span class="line">			<span class="keyword">if</span>(accessLimit == <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">int</span> seconds = accessLimit.seconds();</span><br><span class="line">			<span class="keyword">int</span> maxCount = accessLimit.maxCount();</span><br><span class="line">			String key = request.getRequestURI();</span><br><span class="line">            <span class="comment">//获取现在的次数</span></span><br><span class="line">			String count = jedisUtils.get(key, RedisDBEnum.ACCESS_BD.getDb());</span><br><span class="line">	    	<span class="keyword">if</span>(count == <span class="keyword">null</span>) &#123;</span><br><span class="line">				jedisUtils.setex(<span class="string">"access"</span> + key, String.valueOf(<span class="number">1</span>), seconds, RedisDBEnum.ACCESS_BD.getDb());</span><br><span class="line">	    	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(Integer.valueOf(count) &lt; maxCount) &#123;</span><br><span class="line">				jedisUtils.incr(<span class="string">"access"</span> + key, RedisDBEnum.ACCESS_BD.getDb());</span><br><span class="line">	    	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">	    		render(response, CodeMsg.ACCESS_LIMIT_REACHED);</span><br><span class="line">	    		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	    	&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>图形验证码方式防刷</p>
+<ul>
+<li><p>在用户进入秒杀商品页面（跳转该页面时，服务端生成与用户对应的验证码，并且将该验证码与用户对应的方式放入到redis中存放，设置过期时间）的时候增加验证码输入框</p>
+</li>
+<li><p>注意需要为验证码增加一个刷新验证码的接口，用户刷新验证码的时候生成一个新的验证码并且删除旧的验证码，再将新的验证码放入到redis中同时设置过期时间</p>
+<ul>
+<li>记得一定要对刷新验证码的接口进行<strong>防刷的操作</strong>（因为刷新验证码接口需要对redis进行数据操作，对redis 操作是有网络开销的，不做防刷操作的话，被别人恶意请求的话是会对服务器产生负担的）</li>
+</ul>
+</li>
+<li><p>验证码的类型：可以生成算术题目的验证码，也可以是简单的字母+数字组合的验证码；可自行选择，只有验证码验证通过后再进行商品的秒杀</p>
+</li>
+<li><p>下面引用一个别人写好的例子（使用swing生成一个算术类型的验证码）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Results&lt;String&gt; <span class="title">getSeckillVerifyCod</span><span class="params">(HttpServletResponse response,User user,@RequestParam(<span class="string">"goodsId"</span>)</span><span class="keyword">long</span> goodsId) </span>&#123;</span><br><span class="line">    	<span class="keyword">try</span> &#123;</span><br><span class="line">    		BufferedImage image  = orderService.createVerifyCode(user, goodsId);</span><br><span class="line">    		OutputStream out = response.getOutputStream();</span><br><span class="line">    		ImageIO.write(image, <span class="string">"JPEG"</span>, out);</span><br><span class="line">    		out.flush();</span><br><span class="line">    		out.close();</span><br><span class="line">    		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    	&#125;<span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">    		e.printStackTrace();</span><br><span class="line">    		<span class="keyword">return</span> Results.faild(CodeMsg.SECKILL_FAIL);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> BufferedImage <span class="title">createVerifyCode</span><span class="params">(User user, <span class="keyword">long</span> goodsId)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(user == <span class="keyword">null</span> || goodsId &lt;=<span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> width = <span class="number">80</span>;</span><br><span class="line">		<span class="keyword">int</span> height = <span class="number">32</span>;</span><br><span class="line">		<span class="comment">//create the image</span></span><br><span class="line">		BufferedImage image = <span class="keyword">new</span> BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);</span><br><span class="line">		Graphics g = image.getGraphics();</span><br><span class="line">		<span class="comment">// set the background color</span></span><br><span class="line">		g.setColor(<span class="keyword">new</span> Color(<span class="number">0xDCDCDC</span>));</span><br><span class="line">		g.fillRect(<span class="number">0</span>, <span class="number">0</span>, width, height);</span><br><span class="line">		<span class="comment">// draw the border</span></span><br><span class="line">		g.setColor(Color.black);</span><br><span class="line">		g.drawRect(<span class="number">0</span>, <span class="number">0</span>, width - <span class="number">1</span>, height - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">// create a random instance to generate the codes</span></span><br><span class="line">		Random rdm = <span class="keyword">new</span> Random();</span><br><span class="line">		<span class="comment">// make some confusion</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++) &#123;</span><br><span class="line">			<span class="keyword">int</span> x = rdm.nextInt(width);</span><br><span class="line">			<span class="keyword">int</span> y = rdm.nextInt(height);</span><br><span class="line">			g.drawOval(x, y, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// generate a random code</span></span><br><span class="line">		String verifyCode = generateVerifyCode(rdm);</span><br><span class="line">		g.setColor(<span class="keyword">new</span> Color(<span class="number">0</span>, <span class="number">100</span>, <span class="number">0</span>));</span><br><span class="line">		g.setFont(<span class="keyword">new</span> Font(<span class="string">"Candara"</span>, Font.BOLD, <span class="number">24</span>));</span><br><span class="line">		g.drawString(verifyCode, <span class="number">8</span>, <span class="number">24</span>);</span><br><span class="line">		g.dispose();</span><br><span class="line">		<span class="comment">//把验证码存到redis中，设置过期时间</span></span><br><span class="line">		<span class="keyword">int</span> rnd = calc(verifyCode);</span><br><span class="line">		redisService.set(<span class="string">"seckill_vc_"</span> + user.getId()+<span class="string">"_"</span>+goodsId, rnd,<span class="number">60</span> ,RedisDBEnum.ACCESS_BD.getDb());</span><br><span class="line">		<span class="comment">//输出图片	</span></span><br><span class="line">		<span class="keyword">return</span> image;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">calc</span><span class="params">(String exp)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			ScriptEngineManager manager = <span class="keyword">new</span> ScriptEngineManager();</span><br><span class="line">			ScriptEngine engine = manager.getEngineByName(<span class="string">"JavaScript"</span>);</span><br><span class="line">			<span class="keyword">return</span> (Integer)engine.eval(exp);</span><br><span class="line">		&#125;<span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">char</span>[] ops = <span class="keyword">new</span> <span class="keyword">char</span>[] &#123;<span class="string">'+'</span>, <span class="string">'-'</span>, <span class="string">'*'</span>&#125;;</span><br><span class="line">	</span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">generateVerifyCode</span><span class="params">(Random rdm)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num1 = rdm.nextInt(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">int</span> num2 = rdm.nextInt(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">int</span> num3 = rdm.nextInt(<span class="number">10</span>);</span><br><span class="line">    <span class="keyword">char</span> op1 = ops[rdm.nextInt(<span class="number">3</span>)];</span><br><span class="line">    <span class="keyword">char</span> op2 = ops[rdm.nextInt(<span class="number">3</span>)];</span><br><span class="line">    String exp = <span class="string">""</span>+ num1 + op1 + num2 + op2 + num3;</span><br><span class="line">    <span class="keyword">return</span> exp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>MQ实现异步商品秒杀</p>
+<blockquote>
+<p>为什么要异步下单请往下看。。</p>
+</blockquote>
+<ul>
+<li>首先需要将秒杀商品的sku放入到redis中</li>
+<li>当到了秒杀的时间段开始秒杀的时候</li>
+<li>先判断redis中的sku是否还有（大于0），没有则直接返回秒杀失败；还有sku的时候，对redis中sku 的值进行减一操作</li>
+<li>此时需要查看是否该用户已经秒杀过该商品了（视业务而定，在这里一个用户只能秒杀一次）<ul>
+<li>如果已经秒杀过该商品的用户，直接返回（可以对sku进行恢复）</li>
+</ul>
+</li>
+<li>如果不是秒杀过该商品的用户，那么将用户和商品信息放入到消息队列中（可以使用Direct Exchange模式）</li>
+<li>加入消息队列后即可返回给用户（排队或其他消息），然后轮询订单的接口查看订单是否已经准备好<ul>
+<li>下单的系统监听该消息队列，获取到消息时先判断用户是否已经秒杀过。如果没有则进行减库存、下订单的操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="为什么要异步下单？"><a href="#为什么要异步下单？" class="headerlink" title="为什么要异步下单？"></a>为什么要异步下单？</h2><p>（个人理解，大神们有更好的理解可以发表一下，非常感谢！）</p>
+<ul>
+<li><p>在电商平台中，需要考虑到技术方面的各个环节，在这个项目中实现的商品秒杀并不是基于服务化的环境去搭建的系统，在这里只是给出了一些实现的思路而已。</p>
+</li>
+<li><p>下单操作就需要业务，网络和并发量等方面的问题了，一般服务分得细的话，订单的操作应该交由特定的服务去处理，这里就可以交由消息队列去实现异步的下单操作。</p>
+</li>
+<li><p>秒杀的API可以先返回排队或者请稍等的文案，然后又前台去轮询订单是否已经生成。这样做还能降低系统的复杂度，并且如果是同步的操作那么在很短时间处理很大量的并发请求的话难度是很高的，异步方式去处理的话能够保障（注意：不是保证！）系统的可用性了。</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/rifumei.jpg" alt="Adrian Dai">
+            
+              <p class="site-author-name" itemprop="name">Adrian Dai</p>
+              <p class="site-description motion-element" itemprop="description">看板娘赛高！</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/daiadrian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:daiadrian@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/Adrian_Dai" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-copyright"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Adrian Dai</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":150,"height":300,"vOffset":-100,"hOffset":0},"mobile":{"show":true,"motion":true},"react":{"opacityDefault":0.9,"opacityOnHover":0.5},"log":false});</script></body>
+<script type="text/javascript" src="/js/src/love.js"></script>
+</html>
