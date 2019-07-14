@@ -262,6 +262,239 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/14/ThreadPoolExecutor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Adrian Dai">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/rifumei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Adrian">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/14/ThreadPoolExecutor/" itemprop="url">ThreadPoolExecutor</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-14T12:00:30+08:00">
+                2019-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                              ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                              RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">            keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">        <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="keyword">this</span>.acc = System.getSecurityManager() == <span class="keyword">null</span> ?</span><br><span class="line">                <span class="keyword">null</span> :</span><br><span class="line">                AccessController.getContext();</span><br><span class="line">        <span class="keyword">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">        <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">        <span class="keyword">this</span>.workQueue = workQueue;</span><br><span class="line">        <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">        <span class="keyword">this</span>.threadFactory = threadFactory;</span><br><span class="line">        <span class="keyword">this</span>.handler = handler;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="构造方法参数解析"><a href="#构造方法参数解析" class="headerlink" title="构造方法参数解析"></a>构造方法参数解析</h3><ol>
+<li><p><strong><font color="green">corePoolSize</font></strong>：核心线程数</p>
+</li>
+<li><p><strong><font color="green">maximumPoolSize</font></strong>：最大线程数，线程池允许创建的最大线程数</p>
+</li>
+<li><p><strong><font color="green">workQueue</font></strong>：任务队列，<code>BlockingQueue</code> 接口的某个实现（常使用 <code>ArrayBlockingQueue</code> 和 <code>LinkedBlockingQueue</code>）</p>
+</li>
+<li><p><strong><font color="green">keepAliveTime</font></strong>：空闲线程的<strong>保活时间</strong>，如果某线程的空闲时间超过这个值都没有任务给它做，那么可以被关闭了</p>
+<blockquote>
+<p><font color="red"><strong>注意：</strong></font>这个值并不会对所有线程起作用；</p>
+<ol>
+<li>如果<strong>线程池中的线程数</strong>少于等于核心线程数 <code>corePoolSize</code><strong>，那么这些线程不会因为空闲太长时间而被关闭，</strong></li>
+<li><strong>可以通过调用 <code>allowCoreThreadTimeOut(true)</code></strong> 使核心线程数内的线程也可以被回收</li>
+</ol>
+</blockquote>
+</li>
+<li><p><strong><font color="green">TimeUnit</font></strong>：参数的时间单位；<code>TimeYnit</code> 是枚举类</p>
+</li>
+<li><p><strong><font color="green">threadFactory</font></strong>：<strong>用于生成线程</strong>，一般我们可以用默认的就可以了</p>
+<blockquote>
+<p>通常，我们可以通过它将我们的线程的名字设置得比较可读一些</p>
+<p>如 <code>Message-Thread-1</code>， <code>Message-Thread-2</code> 类似这样</p>
+</blockquote>
+</li>
+<li><p><strong><font color="green">handler</font></strong>：当线程池已经满了，但是又有新的任务提交的时候，该采取什么策略由这个来指定</p>
+<blockquote>
+<p> <code>rejectedExecutionHandler</code> 用于处理当线程池不能执行此任务时的情况</p>
+<p>主要的策略有：（默认策略是 抛出异常）</p>
+<ol>
+<li><strong>抛出 RejectedExecutionException 异常</strong></li>
+<li><strong>忽略任务</strong></li>
+<li><strong>使用提交任务的线程来执行此任务</strong></li>
+<li><strong>将队列中等待最久的任务删除，然后提交此任务</strong></li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h3 id="任务策略"><a href="#任务策略" class="headerlink" title="任务策略"></a>任务策略</h3><p>​        任务策略执行的时期是<font color="red"><strong>线程池的线程达到 <code>maximumPoolSize</code> 的时候，此时新提交的任务就会按照指定策略进行操作</strong></font></p>
+<ul>
+<li><strong>CallerRunsPolicy</strong>：只要线程池没有被关闭，那么由提交任务的线程自己来执行这个任务</li>
+</ul>
+<ul>
+<li><strong>AbortPolicy</strong>：不管怎样，直接抛出 <code>RejectedExecutionException</code> 异常（默认）</li>
+</ul>
+<ul>
+<li><strong>DiscardPolicy</strong>：不做任何处理，直接忽略掉这个任务</li>
+</ul>
+<ul>
+<li><strong>DiscardOldestPolicy</strong>：如果线程池没有被关闭的话，把<font color="blue">队列队头的任务（也就是等待了最长时间的）直接扔掉</font>，然后提交这个任务到等待队列中</li>
+</ul>
+<h3 id="线程池中的线程创建时机"><a href="#线程池中的线程创建时机" class="headerlink" title="线程池中的线程创建时机"></a>线程池中的线程创建时机</h3><ol>
+<li>如果当前线程数少于 <code>corePoolSize</code>，那么提交任务的时候创建一个新的线程，并由这个线程执行这个任务</li>
+<li>如果当前线程数已经达到 <code>corePoolSize</code>，那么将<strong>提交的任务添加到队列中</strong>，<strong>等待线程池中的线程去队列中取任务</strong></li>
+<li><strong>如果队列已满，那么创建新的线程来执行任务，需要保证池中的线程数不会超过 <code>maximumPoolSize</code>，如果此时线程数超过了 <code>maximumPoolSize</code>，那么执行拒绝策略</strong></li>
+</ol>
+<p><font color="red"><strong>注意：</strong></font>如果将队列设置为<strong>无界队列</strong>，那么线程数达到 corePoolSize 后，其实线程数就不会再增长了</p>
+<h3 id="线程池的状态和状态间的转换"><a href="#线程池的状态和状态间的转换" class="headerlink" title="线程池的状态和状态间的转换"></a>线程池的状态和状态间的转换</h3><h4 id="线程池状态"><a href="#线程池状态" class="headerlink" title="线程池状态"></a>线程池状态</h4><ul>
+<li><p><strong><font color="blue">RUNNING（-1）</font></strong>：这是正常的状态：接受新的任务，处理等待队列中的任务</p>
+</li>
+<li><p><strong><font color="blue">SHUTDOWN（0）：</font></strong>不接受新的任务提交，但是会继续处理等待队列中的任务</p>
+</li>
+<li><p><strong><font color="blue">STOP（1）：</font></strong>不接受新的任务提交，不再处理等待队列中的任务，中断正在执行任务的线程</p>
+</li>
+<li><p><strong><font color="blue">TIDYING（2）：</font></strong>所有的任务都销毁了，workCount 为 0。线程池的状态在转换为 TIDYING 状态时，会执行钩子方法 terminated()</p>
+</li>
+<li><p><strong><font color="blue">TERMINATED（3）：</font></strong>terminated() 方法结束后，线程池的状态就会变成这个</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>线程池状态</strong>等于 0 的时候不能提交任务，大于 0 的话，连正在执行的任务也需要中断</p>
+</blockquote>
+<h4 id="状态间的切换"><a href="#状态间的切换" class="headerlink" title="状态间的切换"></a>状态间的切换</h4><ul>
+<li><p><strong><font color="green">RUNNING -&gt; SHUTDOWN：</font></strong>当调用了 <strong>shutdown()</strong> 后，会发生这个状态转换，这也是最重要的</p>
+</li>
+<li><p><strong><font color="green">(RUNNING or SHUTDOWN) -&gt; STOP：</font></strong>当调用 <strong>shutdownNow()</strong> 后，会发生这个状态转换，这下要清楚 shutDown() 和 shutDownNow() 的区别了</p>
+</li>
+<li><p><strong><font color="green">SHUTDOWN -&gt; TIDYING：</font></strong>当任务队列和线程池都清空后，会由 SHUTDOWN 转换为 TIDYING</p>
+</li>
+<li><p><strong><font color="green">STOP -&gt; TIDYING：</font></strong>当任务队列清空后，发生这个转换</p>
+</li>
+<li><p><strong><font color="green">TIDYING -&gt; TERMINATED：</font></strong>这个前面说了，当 terminated() 方法结束后</p>
+</li>
+</ul>
+<h3 id="ThreadPoolExecutor总结"><a href="#ThreadPoolExecutor总结" class="headerlink" title="ThreadPoolExecutor总结"></a>ThreadPoolExecutor总结</h3><ol>
+<li><p><code>corePoolSize</code> 到 <code>maximumPoolSize</code> 之间的线程<strong>会被回收</strong>，<code>corePoolSize</code>  的线程也可以通过设置而得到回收（<code>allowCoreThreadTimeOut(true)</code>）</p>
+</li>
+<li><p><strong><code>workQueue</code> 用于存放任务，</strong>添加任务的时候，如果当前线程数超过了 <code>corePoolSize</code>，那么往该队列中插入任务，<strong>线程池中的线程会负责到队列中拉取任务</strong></p>
+</li>
+<li><p>如果某个任务执行<strong>出现异常</strong>，那么<strong><font color="red">执行任务的线程会被关闭</font></strong>，而不是继续接收其他任务。然后会<strong>启动一个新的线程来代替它</strong></p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/List总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2989,216 +3222,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/19/JVM内存模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Adrian Dai">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/rifumei.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Adrian">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/19/JVM内存模型/" itemprop="url">JVM内存模型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-19T23:16:10+08:00">
-                2019-01-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index">
-                    <span itemprop="name">JVM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="线程共享内存区域"><a href="#线程共享内存区域" class="headerlink" title="线程共享内存区域"></a>线程共享内存区域</h1><h2 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h2><p>​    此内存区域在虚拟机启动的时候创建，几乎所有对象的实例和数组都在堆中分配内存空间。    </p>
-<p>​    Java堆是垃圾回收主要的管理区域，而且现在的垃圾收集器基本都采用分代收集算法（这是针对不同分代的特点采用适当的收集算法，提高垃圾收集的效率），所以一般为了在内存方面出发，堆可以分为老年代和新生代。</p>
-<blockquote>
-<p>新生代中，也可以细分为Eden空间，To Survivor空间和From Survivor空间等。(垃圾收集和对象内存分配在垃圾收集再详细分析)</p>
-<ul>
-<li>这里分为这样的空间是因为采用了标记复制的垃圾收集算法，但是基本的标记复制算法是采用1:1的方式划分空间，这样的话会浪费掉很多内存空间的使用，所以分成了两个Survivor区和一个Eden区（默认1:1:8）</li>
-<li>当Eden区被占满或者Eden区没有办法为新对象分配足够的内存空间时，会触发垃圾回收；垃圾收集后存活的对象会被<strong>复制</strong>到From区，当From区满的时候会将存活的对象<strong>复制</strong>到To区域（此时包括来自Eden区存活的对象），然后这两个区域会交换角色。注意：<font color="blue">Survivor区总是有一个是空的</font>，Survivor-From 区的对象分两类，一类是年轻的对象（分代年龄小），也是复制到 Survivor-To 区，还有一类是老东西，晋升到老年代中。（参考下面两张图片，来源：《<a href="http://www.oracle.com/technetwork/java/javase/memorymanagement-whitepaper-150215.pdf" target="_blank" rel="noopener">Memory Management in the Java HotSpot Virtual Machine</a>》）</li>
-<li>上面说的会将存活对象复制到To区域说得不全面，因为有可能To区域的内存会被占满，然后还有其他存活的对象就没有办法放入到To区中，那么这里就涉及<strong>分配担保机制</strong>了，也就是Survivor区域的空间不够用的时候，这些存活对象会直接通过这个机制进入到老年代中</li>
-<li>虚拟机会给每个对象定义一个对象年龄的计数器，当年轻代的对象经过MinorGC开始复制到Survivor区的时候，对象的年龄会增加1，当对象年龄达到一定程度或者触发分配担保机制的时候会晋升到老年代当中</li>
-</ul>
-</blockquote>
-<p><img src="/2019/01/19/JVM内存模型/./JVM内存模型/From-To1.png" alt="年轻代垃圾收集前"></p>
-<p><img src="/2019/01/19/JVM内存模型/./JVM内存模型/From-To2.png" alt="年轻代垃圾收集后"></p>
-<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>​    方法区主要用于存储被虚拟机加载的类信息（Class相关信息：类名，访问修饰符，字段描述，方法描述等），常量，静态变量，即时编译器编译后的代码等数据。</p>
-<p>​    方法区通常被我们称作：永久代。但是这只是HotSpot VM对方法区的实现而已；在其他的VM（JRockit等）并没有永久代。</p>
-<p>​    注意的是，在JDK1.8中，永久代已经被移除（JDK1.7中，永久代中的运行时常量池被移到堆中），此时HotSpot VM对方法区的实现变成了元空间<code>Metaspace</code> ，元空间和永久代的本质是类似的，<font color="red">不同的地方是元空间并不在虚拟机中，而是使用本地内存（Native Memory）</font>。</p>
-<blockquote>
-<p>在方法区中，对于很多动态生成类的情况容易出现OutOfMemoryError的异常。</p>
-<p>常见的场景就是JSP页面较多的情况（JSP第一次运行需要进行编译）、CGLib增强和动态语言（<em>Groovy</em>）</p>
-</blockquote>
-<h3 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h3><p>​    运行时常量池是属于方法区的一部分（JDK7后被移到堆中）。其用于存储<strong>编译期</strong>生成的字面量和符号引用。</p>
-<blockquote>
-<p>程序运行期间可以通过<code>String.intern()</code> 将变量放入运行时常量池中</p>
-</blockquote>
-<h1 id="线程私有的内存区域"><a href="#线程私有的内存区域" class="headerlink" title="线程私有的内存区域"></a>线程私有的内存区域</h1><h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>程序计数器是当前线程执行的代码的<strong>行号指示器</strong></p>
-<ul>
-<li>当执行Native方法的时候，该计数器值是空的(<code>undefined</code>)</li>
-<li>该内存区域是<font color="red">唯一一个</font>没有规定<code>OutOfMemoryError</code> 情况的区域</li>
-</ul>
-<h2 id="Java虚拟机栈"><a href="#Java虚拟机栈" class="headerlink" title="Java虚拟机栈"></a>Java虚拟机栈</h2><p>​    Java虚拟机栈的生命周期与当前线程相同；虚拟机栈是Java方法执行时的内存模型，在方法执行时会创建栈帧存放局部变量表、操作数栈、动态链接和方法出口等信息。</p>
-<p>​    在虚拟机栈中，我们平常主要关注的是局部变量表：</p>
-<ol>
-<li><p>局部变量表的内存空间在编译期间完成分配</p>
-</li>
-<li><p>局部变量表包括基本数据类型、指向字节码指令的地址和对象的引用（即<code>reference</code>）</p>
-<ul>
-<li><p>对象的引用主要有句柄和直接指针的两种方式：</p>
-<ul>
-<li><p>句柄：使用句柄的方式时，JVM会在Java堆中开辟一部分内存作为句柄池，虚拟机栈中的<code>reference</code>中储存的就是句柄的内存地址，句柄则包含了该对象的实例数据和类型数据的内存地址。</p>
-<blockquote>
-<p>类型数据：该类型数据是在方法区中的Class类信息和静态变量等数据</p>
-</blockquote>
-</li>
-<li><p>直接指针：顾名思义就是虚拟机栈中的<code>reference</code>中储存的是该对象的实例数据和类型数据的内存地址。</p>
-</li>
-</ul>
-</li>
-<li><p>两种方式各有各的优劣势：</p>
-<ul>
-<li>句柄：其优势之处就是稳定，当垃圾收集器回收内存中的对象时，该对象要么存活在年轻代要么晋升到老年代，这个时候该对象的内存地址就会发生改变，此时虚拟机栈中<code>reference</code> 的指针就不需要发生改变，只需要改变句柄中对象的内存地址即可。</li>
-<li>直接指针：直接指针访问对象的速度会比句柄快，因为它少了一次指针定位的开销。在大量的对象访问的时候，直接指针的效率是相当的客观。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<hr>
-<blockquote>
-<p>线程请求的栈深度大于虚拟机所允许的最大深度，会抛出<code>StackOverflowError</code>异常</p>
-<blockquote>
-<p>这里的意思是：Java方法的从执行到结束就相当于将一个栈帧在虚拟机栈中的入栈和出栈的过程；当一个死循环的递归方法调用时，就会抛出StackOverflowError；因为死循环的递归，会不断的往虚拟机栈中压入栈帧，当达到最大深度时，则抛出该异常。</p>
-</blockquote>
-<p>虚拟机在动态扩展时，无法为栈分配足够的内存空间时会抛出<code>OutOfMemoryError</code>异常</p>
-<blockquote>
-<p>这里有容易会和上面那个混淆，唯一需要分清的是当栈空间不够分配的时候：这种情况下是因为内存不足还是栈的深度不够的问题就能分清楚这两种情况了。</p>
-</blockquote>
-</blockquote>
-<hr>
-<h2 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h2><p>​    本地方法栈跟Java虚拟机栈的作用基本上是相同的，不同之处是Java虚拟机栈服务的是Java方法，而本地方法栈服务的对象是Native方法</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -3251,7 +3274,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -3262,7 +3285,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -3273,7 +3296,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
