@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Adrian">
 <meta property="og:description" content="注：最后两位为锁标记位，倒数第三位是偏向标记，如果是1表示是偏向锁；合并单元格的位数就是 该字段的位数，例如hash code共25（23+2）位。  另外，对于偏向锁，如果Thread ID = 0，表示未加锁  Synchronized锁升级:偏向锁 → 轻量级锁 → 重量级锁​        Synchronized 会从无锁升级为偏向锁，再升级为轻量级锁，最后升级为重量级锁，这里的轻量级">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁、轻量级锁和重量级锁/偏向锁撤销流程.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁、轻量级锁和重量级锁/轻量级锁升级重量级锁.png">
-<meta property="og:updated_time" content="2019-10-03T08:17:07.844Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁撤销流程.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/轻量级锁升级重量级锁.png">
+<meta property="og:updated_time" content="2019-10-03T08:34:37.347Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="偏向锁、轻量级锁和重量级锁">
 <meta name="twitter:description" content="注：最后两位为锁标记位，倒数第三位是偏向标记，如果是1表示是偏向锁；合并单元格的位数就是 该字段的位数，例如hash code共25（23+2）位。  另外，对于偏向锁，如果Thread ID = 0，表示未加锁  Synchronized锁升级:偏向锁 → 轻量级锁 → 重量级锁​        Synchronized 会从无锁升级为偏向锁，再升级为轻量级锁，最后升级为重量级锁，这里的轻量级">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/03/偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png">
 
 
 
@@ -356,7 +356,7 @@
       
 
       
-        <p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/./偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png" alt="JVM的MarkWord存储结构"></p>
+        <p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/JVM的MarkWord存储结构.png" alt="JVM的MarkWord存储结构"></p>
 <p><strong>注</strong>：最后两位为锁标记位，倒数第三位是偏向标记，如果是1表示是偏向锁；合并单元格的位数就是 该字段的位数，例如hash code共25（23+2）位。</p>
 <blockquote>
 <p><strong>另外，对于偏向锁，如果Thread ID = 0，表示未加锁</strong></p>
@@ -387,7 +387,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//针对上面的伪代码实现</span></span><br><span class="line"><span class="comment">// 撤销流程的伪代码，在全局检查点执行该操作</span></span><br><span class="line"><span class="keyword">if</span> mark word 存储的不是可偏向状态:</span><br><span class="line">    <span class="keyword">return</span>;     <span class="comment">// 如果不是偏向锁，那么没有撤销偏向的必要</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">if</span> Thread ID 指向的线程不存活:</span><br><span class="line">        <span class="keyword">if</span> 允许重偏向:</span><br><span class="line">            退回可偏向但未偏向的状态   <span class="comment">// Thread ID为0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            偏向撤销，变为无锁状态</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> Thread ID 指向的线程，仍然拥有锁:</span><br><span class="line">            升级为轻量级锁，将mark word复制到线程栈中，然后stack pointer指向最老的相关锁记录</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> 允许重偏向:</span><br><span class="line">                退回可偏向但未偏向的状态   <span class="comment">// Thread ID为0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                偏向撤销，变为无锁状态</span><br></pre></td></tr></table></figure>
 <p><strong>小结：</strong></p>
 <p>​        撤销偏向的操作需要在全局检查点执行。我们假设线程A曾经拥有锁（不确定是否释放锁）， 线程B来竞争锁对象，如果当线程A不在拥有锁时或者死亡时，线程B直接去尝试获得锁（根据是否允许重偏向（<code>rebiasing</code>），获得偏向锁或者轻量级锁）；如果线程A仍然拥有锁，那么锁升级为轻量级锁，线程B自旋请求获得锁</p>
-<p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/./偏向锁、轻量级锁和重量级锁/偏向锁撤销流程.png" alt="偏向锁撤销流程"></p>
+<p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/偏向锁撤销流程.png" alt="偏向锁撤销流程"></p>
 <h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p>​        轻量级锁不是使用操作系统互斥量来实现锁， 而是通过 <code>CAS</code> 操作来实现锁。当线程获得轻量级锁后，可以再次进入锁，即锁是可重入（<code>Reentrance Lock</code>）的</p>
 <p>​        <strong>在轻量级锁的加锁阶段，如果线程发现对象头中Mark Word已经存在指向自己栈帧的指针，即线程已经获得轻量级锁，那么只需要将0存储在自己的栈帧中（此过程称为递归加锁）；在解锁的时候，如果发现锁记录的内容为0， 那么只需要移除栈帧中的锁记录即可，而不需要更新Mark Word</strong></p>
 <p>​        在轻量级锁状态下继续锁竞争，没有抢到锁的线程将<strong><font color="red">自旋</font></strong>（即不停地循环判断锁是否能够被成功获取）</p>
@@ -403,7 +403,7 @@
 </ul>
 </li>
 </ol>
-<p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/./偏向锁、轻量级锁和重量级锁/轻量级锁升级重量级锁.png" alt="轻量级锁升级重量级锁"></p>
+<p><img src="/2019/10/03/偏向锁、轻量级锁和重量级锁/轻量级锁升级重量级锁.png" alt="轻量级锁升级重量级锁"></p>
 <h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>​        （有个计数器记录自旋次数，默认允许循环10次，可以通过虚拟机参数更改）</p>
 <p>​        如果锁竞争情况严重，某个达到最大自旋次数的线程，会将轻量级锁升级为<strong><font color="red">重量级锁</font></strong>（依然是 <code>CAS</code> 修改锁标志位，但不修改持有锁的线程ID）</p>
 <p>​        当后续线程尝试获取锁时，<font color="red">发现被占用的锁是重量级锁，直接进入堵塞状态，此时不消耗CPU，然后等拥有锁的线程释放锁后，唤醒堵塞的线程， 然后线程再次竞争锁</font></p>
